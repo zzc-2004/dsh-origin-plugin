@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+dist/
+build/
+node_modules/
+*.bak
+*.bak_*
+backup_*/
+logs/
+output.txt
+*.log
+settings.json
+calibration.json
+.DS_Store
