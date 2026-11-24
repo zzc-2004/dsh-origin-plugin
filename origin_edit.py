@@ -827,7 +827,7 @@ def edit_page(op, po, graph, page_size_cm=None, background=None, layer=None,
 # ---------------------------------------------------------------------------
 # 窗口管理（关闭多个窗口正是新手高频需求）
 # ---------------------------------------------------------------------------
-def manage_pages(op, po, action, pages=None, new_name=None):
+def manage_pages(op, po, action, pages=None, new_name=None, confirm=False):
     """action: close | closeAll | activate | rename | hide | show | duplicate
 
     pages: 短名列表（来自 origin_list_pages）。close 支持 "Book*"/"Graph*" 通配。
@@ -841,6 +841,21 @@ def manage_pages(op, po, action, pages=None, new_name=None):
                          "action 必须是 close/closeAll/activate/rename/hide/show/"
                          f"duplicate，收到 {action!r}")
     if action == "closeall":
+        # 破坏性批量操作一律要显式确认（2026-11-24）：不分实例所有权，
+        # 避免一次误调用把用户工程里的全部页面清空。
+        if not confirm:
+            try:
+                _n = int(op.po.Pages.Count or 0)
+            except Exception:
+                _n = None
+            return oerr.fail(
+                "confirmation_required",
+                "closeAll 会关闭当前工程里的全部页面（%s 页），需要显式确认" %
+                ("?" if _n is None else _n),
+                total_pages=_n,
+                hint="核对页面后带 confirm=true 重试",
+                next_actions=["origin_list_pages 先看有哪些页",
+                              "确认后重试 origin_manage_pages(action='closeAll', confirm=true)"])
         total, _ = _safe(lambda: op.po.Pages.Count)
         targets = []
         for i in range(int(total or 0)):

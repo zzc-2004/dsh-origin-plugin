@@ -408,7 +408,7 @@ def pages_gc_impl(op, threshold=200, dry_run=True):
             suggestion=sugg,
             detail=f"[dry_run] {sugg}")
 
-    cl = _eng._manage_pages_impl("closeAll")
+    cl = _eng._manage_pages_impl("closeAll", confirm=True)
     if not cl.get("ok"):
         return cl
     return oerr.ok(

@@ -15,3 +15,5 @@ output.txt
 settings.json
 calibration.json
 .DS_Store
+*.bak-*
+*.bak_*

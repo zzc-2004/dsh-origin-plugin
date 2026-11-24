@@ -104,6 +104,13 @@ def layout_info_impl(op, po, graph, width_px=1100):
                       "x": oedit.lt_float(po, f"{name}.x"),
                       "y": oedit.lt_float(po, f"{name}.y"),
                       "fsize": oedit.lt_float(po, f"{name}.fsize")})
+    # 图标题对象（引擎写入，固定命名 DshTitle；不在 TextN 序列里）
+    _t = oedit.lt_str(po, "DshTitle.text$")
+    if _t:
+        texts.append({"name": "DshTitle", "text": _t,
+                      "x": oedit.lt_float(po, "DshTitle.x"),
+                      "y": oedit.lt_float(po, "DshTitle.y"),
+                      "fsize": oedit.lt_float(po, "DshTitle.fsize")})
 
     legend = {}
     for prop in ("legend.left", "legend.top"):
