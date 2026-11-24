@@ -1832,7 +1832,8 @@ def origin_edit_page(graph: str, page_size_cm: dict = None, background: int = No
 
 
 @mcp.tool()
-def origin_manage_pages(action: str, pages: list = None, new_name: str = "") -> dict:
+def origin_manage_pages(action: str, pages: list = None, new_name: str = "",
+                        confirm: bool = False) -> dict:
     """窗口管理：关闭 / 激活 / 重命名 / 隐藏 / 显示 / 复制页面（含工作簿与图页）。
 
     典型用法："把多余的两个空工作簿关掉" → action='close', pages=['Book3','Book4']。
@@ -1842,11 +1843,13 @@ def origin_manage_pages(action: str, pages: list = None, new_name: str = "") -> 
             （closeAll 关闭项目内全部页面，会话产物一键清理，不需要 pages）
         pages: 页面短名列表（用 origin_list_pages 获取；close 支持 'Book*' 通配）
         new_name: action=rename 时的新名字
+        confirm: closeAll 是破坏性批量操作，必须显式 confirm=true（防误清空工程）
     Returns:
         {"ok": true, "results": [{page, status, note}], "n_applied": N}
         每项都做复核（关闭后确认页面消失 / 激活后确认 page.name$ 匹配）。
     """
-    return engine.manage_pages(action, pages=pages, new_name=new_name or None)
+    return engine.manage_pages(action, pages=pages, new_name=new_name or None,
+                               confirm=bool(confirm))
 
 
 @mcp.tool()

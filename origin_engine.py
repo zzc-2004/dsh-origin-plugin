@@ -691,7 +691,12 @@ def _kill_residual_origin(wait_seconds=2.0):
 def _connect_impl():
     global _connected, _origin_app
     if _connected and _origin_app is not None:
-        return True, _describe_impl()
+        try:
+            return True, _describe_impl()
+        except Exception:
+            # Origin 被外部关闭或 COM 失效：丢弃缓存连接，走下面的重新连接
+            _connected = False
+            _origin_app = None
     # 连接前自愈（#1）：清理残留 Origin64 进程 -> 等 2 秒 -> 再让 COM 启动/复用
     autokill = _kill_residual_origin() if _autokill_enabled() else None
     blocked = _isolated_session_blocked()
@@ -713,19 +718,23 @@ def _connect_impl():
         except Exception:
             pass
         started = time.time()
+        # 连接前先记录 Origin 是否已经在跑（op.path() 会拉起 Origin，之后判断就晚了）
+        _pre_running = bool(_origin_running())
         user_files = op.path()          # 触发 COM 连接（OriginExt.ApplicationSI）
         elapsed = time.time() - started
         _origin_app = op
         _connected = True
-        _origin_running_before = _origin_running()
-        # 所有权登记（2026-11-19 用户要求重定）：
-        # **只有我们自己把它拉起来的 Origin 才登记**。如果连上之前 Origin 已经在跑，
-        # 那是用户手动开的，一律不登记 —— 观察器永远不会碰用户的窗口。
+        _origin_running_before = _pre_running
+        # 所有权登记（2026-11-20 修正）：
+        # 旧规则「连上前已在跑 = 用户的，不登记」是错的：MCP 自己开过 Origin、
+        # release 之后再重连，就会被误判成用户的，导致弹窗没人点、用户被迫手动点。
+        # 现在**总是登记**当前 Origins PID，安全性交给观察器的 `mcp_busy` 闸门：
+        #   - 用户在操作、MCP 空闲 → 不点（这是真正的保护）
+        #   - MCP 卡在调用上 → 才点
         try:
-            if not _origin_running_before:
-                import origin_watchdog as _wd
-                for _p in _watchdog_origin_pids():
-                    _wd.register_owned_pid(_p)
+            import origin_watchdog as _wd
+            for _p in _watchdog_origin_pids():
+                _wd.register_owned_pid(_p)
         except Exception:
             pass
         nproc = _origin_proc_count()
@@ -865,14 +874,107 @@ def _delete_graph_page(graph_name):
         return False
 
 
+def _backup_base(short):
+    """从 bk_<base>_<hhmmss> 里取 base；不符合本插件命名返回 None。"""
+    import re as _re
+    m = _re.match(r"^bk_?(.+?)_\d{6}$", str(short))
+    return m.group(1) if m else None
+
+
+def _prune_backups_for(short, keep=3):
+    """同一 base 的备份页只保留最近 keep 个（只动本插件命名的 bk_* 页）。"""
+    base = _backup_base(short)
+    if not base:
+        return 0
+    pages = _page_names()
+    same = sorted([p for p in pages
+                   if _backup_base(p) == base and p != short], reverse=True)
+    removed = 0
+    for p in same[keep - 1:]:
+        try:
+            _origin_app.po.LT_execute("window -c %s;" % p)
+            removed += 1
+        except Exception:
+            pass
+    return removed
+
+
+_last_graph_backup = None
+
+
+def _backup_graph_page(graph_name):
+    """把同名图页改名备份，绝不销毁用户页面。返回备份短名；失败返回 None。"""
+    op = _origin_app
+    try:
+        names = _page_names()
+        if graph_name not in names:
+            return None
+        stamp = time.strftime("%H%M%S")
+        base = "".join(ch for ch in str(graph_name) if ch.isalnum() or ch in "_-")[:5] or "page"
+        cand = ("bk_%s_%s" % (base, stamp))[:12]
+        i = 0
+        while cand in names and i < 20:
+            i += 1
+            cand = ("bk%s%d_%s" % (base, i, stamp))[:12]
+        if cand in names:
+            return None
+        op.po.LT_execute("window -r %s %s;" % (graph_name, cand))
+        global _last_graph_backup
+        if cand in _page_names():
+            _last_graph_backup = cand
+            try:
+                _prune_backups_for(cand)
+            except Exception:
+                pass
+            return cand
+        return None
+    except Exception:
+        return None
+
+
+def _page_meta():
+    """返回 {短名: 长名}，用于同时按短名/长名匹配图页。"""
+    op = _origin_app
+    out = {}
+    try:
+        for i in range(int(op.po.Pages.Count or 0)):
+            pg = op.po.Pages(i)
+            short = str(pg.GetName())
+            try:
+                long = str(pg.GetLongName() or "")
+            except Exception:
+                long = ""
+            out[short] = long
+    except Exception:
+        pass
+    return out
+
+
 def _ensure_graph_name(graph_name, title):
-    """幂等命名：若已有同名图页，先删旧再新建，图名保持稳定，不产生 Graph2/3。
+    """幂等命名：同名图页先改名备份（不删除），再新建。
 
     返回用于 new_graph 的 lname。
     """
     if graph_name:
-        _delete_graph_page(graph_name)
-        return str(graph_name)
+        g = str(graph_name)
+        # 图页短名会被 Origin 截断（>12 字符 -> GraphN），所以必须同时按长名匹配
+        target = None
+        for short, long_name in _page_meta().items():
+            if short == g or (long_name and long_name == g):
+                target = short
+                break
+        if target is None and g in _page_names():
+            # 枚举拿不到长名时退回短名匹配（保持旧行为，避免漏备份）
+            target = g
+        if target:
+            is_graph = True
+            try:
+                is_graph = _safe_find_graph(_origin_app, target) is not None
+            except Exception:
+                is_graph = True   # 判断不了时按图页处理：备份比误删安全
+            if is_graph:
+                _backup_graph_page(target)
+        return g
     return title or ""
 
 
@@ -941,6 +1043,113 @@ def _normalize_columns(columns):
 # ---------------------------------------------------------------------------
 # 画图
 # ---------------------------------------------------------------------------
+def _has_any_value(values):
+    """列里是否存在真实数据：None 与 NaN 都算空（Origin 缺测写回 NaN）。"""
+    import math as _math
+    try:
+        for v in (values or []):
+            if v is None:
+                continue
+            if isinstance(v, float) and _math.isnan(v):
+                continue
+            return True
+        return False
+    except Exception:
+        return False
+
+
+def _graph_name_warning(requested, actual):
+    """请求名与实际短名不一致（Origin 会把 >12 字符或重名的短名改成 GraphN）。"""
+    if not requested:
+        return None
+    if str(requested) == str(actual):
+        return None
+    return ("图页短名被 Origin 改为 %s（请求 %s）：短名超过 12 字符或与其他页重名时会发生；"
+            "后续调用请使用 graph=%s" % (actual, requested, actual))
+
+
+def _apply_graph_title(gp, title, size=18.0):
+    """在图页顶部居中加标题（best-effort）。
+
+    返回 (applied: bool, detail: str)。失败不影响绘图结果。
+    """
+    if not title:
+        return False, "未提供 title"
+    try:
+        op = _origin_app
+        gl = gp[0]
+        gp.activate()
+        op.po.LT_execute(
+            "double __dshx0=layer.x.from; double __dshx1=layer.x.to;"
+            " double __dshy0=layer.y.from; double __dshy1=layer.y.to;")
+        vals = [op.lt_float(v) for v in ("__dshx0", "__dshx1", "__dshy0", "__dshy1")]
+        if any(v is None for v in vals):
+            return False, "轴范围不可读，未加标题"
+        x0, x1, y0, y1 = [float(v) for v in vals]
+        if not (x1 > x0):
+            return False, "X 轴范围异常，未加标题"
+        cx = (x0 + x1) / 2.0
+        # 近似居中：按字符数估算文本宽度（Origin 页面单位为 dot，约 600dpi）
+        try:
+            page_w = op.lt_float("page.width")
+            lw_pct = gl.get_float("width")
+            if page_w and lw_pct:
+                layer_w = float(page_w) * float(lw_pct) / 100.0
+                _em = 0.0
+                for _ch in str(title):
+                    _em += 1.05 if ord(_ch) > 0x2E80 else 0.55
+                text_w = _em * float(size) * (600.0 / 72.0)
+                # 超出绘图区宽度时自动缩字号（下限 10pt），避免标题被裁
+                if text_w > layer_w * 0.92 and text_w > 0:
+                    size = max(10.0, float(size) * (layer_w * 0.92) / text_w)
+                    text_w = _em * float(size) * (600.0 / 72.0)
+                cx -= (text_w / 2.0) * ((x1 - x0) / layer_w)
+        except Exception:
+            pass
+        yt = y1 + 0.06 * (y1 - y0)
+        lab = gl.add_label(str(title), float(cx), float(yt))
+        if lab is None:
+            return False, "add_label 返回空"
+        # 字号：LabTalk 通用对象 text 指向最近创建的标注（先设属性，再改名）
+        op.po.LT_execute("text.fsize = %s;" % float(size))
+        try:
+            op.po.LT_execute("text.bold = 1;")
+        except Exception:
+            pass
+        back = op.lt_float("text.fsize")
+        try:
+            op.po.LT_execute("text.just = 1;")
+        except Exception:
+            pass
+        # 固定命名 DshTitle：layout_info / set_font 可以找得到、改得动
+        obj = "未命名"
+        try:
+            # LabTalk 实测：text.name$ = DshTitle 可把对象改名，DshTitle.text$ 能读回
+            op.po.LT_execute("text.name$ = DshTitle;")
+            obj = "DshTitle"
+            try:
+                op.po.LT_execute("string __dshtn$ = DshTitle.text$;")
+                got = None
+                try:
+                    got = op.lt_str("__dshtn$")
+                except Exception:
+                    got = None
+                if not got:
+                    try:
+                        got = op.po.LT_get_str("__dshtn$")
+                    except Exception:
+                        got = None
+                if not got:
+                    obj = "DshTitle(未读回)"
+            except Exception:
+                pass
+        except Exception:
+            pass
+        return True, ("标题已加（字号读回 %s，对象 %s）" % (back, obj or "未命名"))
+    except Exception as e:  # noqa: BLE001
+        return False, "加标题失败: %s" % str(e)[:120]
+
+
 def _plot_impl(worksheet, y_columns=None, x_column=None, plot_type="line",
                graph_name=None, title=None, yerr_column=None,
                style_mode=None, family=None, style_overrides=None):
@@ -962,7 +1171,39 @@ def _plot_impl(worksheet, y_columns=None, x_column=None, plot_type="line",
                              f"plot_type 必须是 {valid_kinds} 之一，收到 {plot_type!r}",
                              valid_kinds=valid_kinds, received=plot_type)
 
-        # 幂等命名：同名图页先删旧再新建
+        # 前置空数据校验（2026-11-24）：必须在改名/建图之前，
+        # 否则一次失败的绘图会把用户的旧图页改名成 bk_* 备份。
+        if plot_type in ("line", "scatter", "line_symbol", "column"):
+            try:
+                _cand = y_columns
+                if _cand is None:
+                    _cand = _y_columns_impl(wks, x_column if x_column is not None else 0)
+                _ok_data = False
+                for _c in (_cand or []):
+                    _i = _col_index_impl(wks, _c)
+                    if _i is None:
+                        continue
+                    try:
+                        if _has_any_value(wks.to_list(_i)):
+                            _ok_data = True
+                            break
+                    except Exception:
+                        _ok_data = True
+                        break
+                if not _cand:
+                    return oerr.fail("invalid_request",
+                                     "除 X 列外没有可绘制的 Y 列；请显式指定 y_columns 或补充数据列",
+                                     x_column=str(x_column))
+                if not _ok_data:
+                    return oerr.fail("empty_data",
+                                     "所选 Y 列没有任何数据，已拒绝创建空图",
+                                     y_columns=[str(c) for c in (_cand or [])])
+            except Exception:
+                pass
+
+        # 幂等命名：同名图页先改名备份再新建（绝不删除用户页面）
+        global _last_graph_backup
+        _last_graph_backup = None
         lname = _ensure_graph_name(graph_name, title or "")
 
         # 特殊图型：直方图（numpy 分箱 + 柱状图，不依赖 plotxy，稳定可控）
@@ -1039,6 +1280,27 @@ def _plot_impl(worksheet, y_columns=None, x_column=None, plot_type="line",
             x_column = 0  # 默认第一列（列索引），与 write_data 的"第一列自动为 X"一致
         if y_columns is None:
             y_columns = _y_columns_impl(wks, x_column)
+
+        # 空数据前置校验（2026-11-24）：宁可在这里报错，也不生成一张空图
+        try:
+            _has_data = False
+            for _yc in (y_columns or []):
+                _ci = _col_index_impl(wks, _yc)
+                if _ci is None:
+                    continue
+                try:
+                    if _has_any_value(wks.to_list(_ci)):
+                        _has_data = True
+                        break
+                except Exception:
+                    _has_data = True   # 读不到就交给后续流程，不误判为空
+                    break
+            if not _has_data:
+                return oerr.fail("empty_data",
+                                 "所选 Y 列没有任何数据，已拒绝创建空图",
+                                 y_columns=[str(c) for c in (y_columns or [])])
+        except Exception:
+            pass
 
         gp = op.new_graph(lname=lname)   # 短名=给定名或自动分配
         gl = gp[0]
@@ -1130,16 +1392,26 @@ def _plot_impl(worksheet, y_columns=None, x_column=None, plot_type="line",
                                   family=family, x_title=x_title,
                                   style_overrides=style_overrides)
         # 单序列柱/条/散点：隐藏图例框（"estimate" 小框对读者无信息）
-        if len(plotted) == 1 and plot_type in ("column", "bar", "scatter", "line_symbol"):
+        if len(plotted) == 1 and plot_type in ("column", "bar", "scatter", "line_symbol", "line"):
             try:
                 gp.activate()
                 op.po.LT_execute("legend.show = 0;")
             except Exception:
                 pass
+        name_warning = _graph_name_warning(graph_name, short_name)
+        title_applied, title_detail = (None, None)
+        if title:
+            title_applied, title_detail = _apply_graph_title(gp, title)
         return {
             "ok": True,
             "graph": short_name,
             "graph_short": short_name,
+            "graph_requested": str(graph_name) if graph_name else None,
+            "name_warning": name_warning,
+            "backup_of": _last_graph_backup,
+            "title": title,
+            "title_applied": title_applied,
+            "title_detail": title_detail,
             "plot_type": plot_type,
             "y_columns": plotted,
             "x_column": str(x_column),
@@ -5277,14 +5549,15 @@ def _edit_page_impl(graph, page_size_cm=None, background=None, layer=None,
         return oerr.from_exception(e, trace=traceback.format_exc(limit=3))
 
 
-def _manage_pages_impl(action, pages=None, new_name=None):
+def _manage_pages_impl(action, pages=None, new_name=None, confirm=False):
     try:
         ok, conn = _connect_impl()
         if not ok:
             return conn
         import origin_edit as oedit
         return oedit.manage_pages(_origin_app, _origin_app.po, action,
-                                  pages=pages, new_name=new_name)
+                                  pages=pages, new_name=new_name,
+                                  confirm=bool(confirm))
     except Exception as e:
         return oerr.from_exception(e, trace=traceback.format_exc(limit=3))
 
@@ -5355,6 +5628,9 @@ def _release_impl():
 
 def _reconnect_impl():
     """显式重连 Origin（release 后恢复自动化；幂等——已连接时原样返回状态）。"""
+    global _connected, _origin_app
+    _connected = False
+    _origin_app = None
     ok, conn = _connect_impl()
     if not ok:
         return conn
@@ -5689,10 +5965,31 @@ def fit(worksheet, x_column, y_column, kind="linear", plot_curve=True,
 
 
 @_synchronized
+def _attach_title_if_requested(r, title):
+    """公共入口统一补图标题（3D/等高线/模板）。失败只记录，不影响主结果。"""
+    if not (isinstance(r, dict) and r.get("ok") and title):
+        return r
+    g = r.get("graph")
+    if not g:
+        return r
+    try:
+        gp = _safe_find_graph(_origin_app, g)
+        if gp is not None:
+            ok_t, det = _apply_graph_title(gp, title)
+            r["title"] = title
+            r["title_applied"] = ok_t
+            r["title_detail"] = det
+    except Exception as e:  # noqa: BLE001
+        r["title_applied"] = False
+        r["title_detail"] = str(e)[:120]
+    return r
+
+
 def plot3d(data, plot_type="surface", fmt="png", file_path=None, width=1200,
            output_dir=None, title=None):
-    return _plot3d_impl(data, plot_type=plot_type, fmt=fmt, file_path=file_path,
-                        width=width, output_dir=output_dir, title=title)
+    return _attach_title_if_requested(
+        _plot3d_impl(data, plot_type=plot_type, fmt=fmt, file_path=file_path,
+                     width=width, output_dir=output_dir, title=title), title)
 
 
 @_synchronized
@@ -5743,9 +6040,10 @@ def histogram(worksheet, column=0, bins=10, plot=False, file_path=None,
 @_synchronized
 def plot_contour(data, plot_type="contour", fmt="png", file_path=None, width=1200,
                  output_dir=None, title=None):
-    return _plot_contour_impl(data, plot_type=plot_type, fmt=fmt,
-                              file_path=file_path, width=width,
-                              output_dir=output_dir, title=title)
+    return _attach_title_if_requested(
+        _plot_contour_impl(data, plot_type=plot_type, fmt=fmt,
+                           file_path=file_path, width=width,
+                           output_dir=output_dir, title=title), title)
 
 
 @_synchronized
@@ -5904,6 +6202,7 @@ def plot_template(template_id, data, graph_name=None, title=None,
                             offset=offset, reverse_x=reverse_x,
                             x_title=x_title, y_title=y_title,
                             gradient=gradient)
+    r = _attach_title_if_requested(r, title)
     if (fmt or file_path) and isinstance(r, dict) and r.get("ok") \
             and r.get("graph"):
         rex = _plot_template_export_task(r["graph"], file_path,
@@ -5978,8 +6277,8 @@ def edit_page(graph, page_size_cm=None, background=None, layer=None,
 
 
 @_synchronized
-def manage_pages(action, pages=None, new_name=None):
-    return _manage_pages_impl(action, pages=pages, new_name=new_name)
+def manage_pages(action, pages=None, new_name=None, confirm=False):
+    return _manage_pages_impl(action, pages=pages, new_name=new_name, confirm=confirm)
 
 
 @_synchronized

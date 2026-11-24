@@ -80,6 +80,39 @@ def _looks_like_placeholder(text):
 # ---------------------------------------------------------------------------
 # 主入口
 # ---------------------------------------------------------------------------
+def _series_status(total, expected_series, per_layer, allow_empty=False):
+    """曲线数判定：0 条曲线视为空图（fail），除非调用方显式声明允许为空。"""
+    if expected_series is not None:
+        if total != int(expected_series):
+            return ("fail",
+                    "图内共 %d 条曲线（逐层 %s），期望 %s" % (total, per_layer, expected_series),
+                    {"value": total, "expected": int(expected_series), "per_layer": per_layer})
+        return ("pass", "图内共 %d 条曲线（逐层 %s）" % (total, per_layer),
+                {"value": total, "per_layer": per_layer})
+    if total == 0:
+        if allow_empty:
+            return ("warn", "图内没有曲线（调用方声明允许为空）", {"value": 0})
+        return ("fail",
+                "图内没有任何曲线（空图）：数据写入或绘图步骤失败，导出的图是空模板",
+                {"value": 0, "per_layer": per_layer})
+    return ("pass", "图内共 %d 条曲线（逐层 %s）" % (total, per_layer),
+            {"value": total, "per_layer": per_layer})
+
+
+def _axis_range_status(frm, to):
+    """轴范围判定：不可读 -> unreadable；非有限或退化（from==to）-> fail。"""
+    import math as _math
+    if frm is None or to is None:
+        return ("unreadable", "轴范围不可读（图页未激活或版本差异）", {})
+    if not (_math.isfinite(frm) and _math.isfinite(to)):
+        return ("fail", "轴范围非有限值（%r..%r），通常意味着空图或数据异常" % (frm, to),
+                {"from": frm, "to": to})
+    if abs(to - frm) <= 1e-12 * max(1.0, abs(frm), abs(to)):
+        return ("fail", "轴范围退化（from==to=%r），图上看不到任何内容" % (frm,),
+                {"from": frm, "to": to})
+    return ("pass", "轴范围 %g..%g" % (frm, to), {"from": frm, "to": to})
+
+
 def verify_graph(op, po, graph, expected=None, files=None):
     """对指定图页做确定性反读核验。
 
@@ -145,28 +178,9 @@ def verify_graph(op, po, graph, expected=None, files=None):
         add("series_count", "unreadable", f"读取曲线失败: {e}")
     if read_ok:
         exp_series = expected.get("series")
-        if exp_series is not None and total != int(exp_series):
-            recount = None
-            try:
-                recount = sum(len(gp.__getitem__(i).plot_list() or [])
-                              for i in range(n_layers or 0))
-            except Exception:
-                recount = None
-            if recount is not None and recount == total:
-                add("series_count", "fail",
-                    f"图内共 {total} 条曲线（逐层 {per_layer}），期望 {exp_series}",
-                    value=total, expected=exp_series, per_layer=per_layer)
-            else:
-                add("series_count", "unreliable",
-                    f"两次统计不一致（{total} vs {recount}），不判失败",
-                    value=total, recount=recount, per_layer=per_layer)
-        elif total == 0:
-            add("series_count", "warn", "图内没有曲线（空模板？）",
-                value=0, per_layer=per_layer)
-        else:
-            add("series_count", "pass",
-                f"图内共 {total} 条曲线（逐层 {per_layer}）",
-                value=total, per_layer=per_layer)
+        status, detail, extra = _series_status(
+            total, exp_series, per_layer, bool(expected.get("allow_empty")))
+        add("series_count", status, detail, **extra)
 
     # --- 轴标题（COM setter/getter；未激活时会返回占位符） ---
     gl0 = layers[0] if layers else None
@@ -197,6 +211,18 @@ def verify_graph(op, po, graph, expected=None, files=None):
             add(f"axis_{ax}_title", "warn", f"{ax} 轴标题为空", value="")
         else:
             add(f"axis_{ax}_title", "pass", f"{ax} 轴标题={t!r}", value=t)
+
+    # --- 轴范围：空图/退化范围是"假通过"的常见来源（LabTalk，需激活复核） ---
+    if gl0 is not None:
+        for ax in ("x", "y"):
+            if activation_verified:
+                frm = _lt_float(op, po, f"layer.{ax}.from")
+                to = _lt_float(op, po, f"layer.{ax}.to")
+                status, detail, extra = _axis_range_status(frm, to)
+            else:
+                status, detail, extra = ("unreadable",
+                                         "轴范围需 LabTalk，当前激活未复核 → 不判失败", {})
+            add(f"axis_{ax}_range", status, detail, **extra)
 
     # --- 轴标题字号：COM 作用域属性（窗口无关），比 LabTalk xb.fsize 可靠 ---
     min_pt = expected.get("min_font_pt")

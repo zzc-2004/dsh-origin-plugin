@@ -158,6 +158,17 @@ def set_font(op, graph, family="Times New Roman", size_pt=None,
             _safe(op.po.LT_execute, f"Text{k}.font = {fam};")
             if size_pt is not None:
                 _safe(op.po.LT_execute, f"Text{k}.fsize = {float(size_pt)};")
+        # 图标题（DshTitle）不在 TextN 序列里，单独处理
+        try:
+            op.po.LT_execute(f'win -a "{short}";')
+            title_txt = oedit.lt_str(op.po, "DshTitle.text$")
+            if title_txt:
+                _safe(op.po.LT_execute, f"DshTitle.font = {fam};")
+                if size_pt is not None:
+                    _safe(op.po.LT_execute, f"DshTitle.fsize = {float(size_pt)};")
+                rec("title_object", "DshTitle", "applied")
+        except Exception:
+            pass
         if n_txt:
             rec("text_objects", f"{n_txt} 个", "applied")
 
