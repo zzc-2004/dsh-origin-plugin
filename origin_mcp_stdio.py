@@ -22,7 +22,7 @@ origin_mcp_stdio —— 通用 MCP stdio 启动入口（v2.3.0 新增）
 客户端接入（把 <python> 换成你的解释器、<dir> 换成本目录绝对路径）：
     {
       "mcpServers": {
-        "dsh-origin": {
+        "mcp-origin": {
           "command": "<python>",
           "args": ["<dir>/origin_mcp_stdio.py"]
         }
@@ -78,12 +78,12 @@ def _print_config():
     }
     print(json.dumps({
         "ok": True,
-        "server_name": "dsh-origin",
+        "server_name": "mcp-origin",
         "server": server,
         "note": "把下面片段合并进对应客户端配置文件的 mcpServers 字段；"
                 "也可直接运行 python install.py 自动写入。",
         "clients": {name: {"config_path": path,
-                           "mcpServers": {"dsh-origin": server}}
+                           "mcpServers": {"mcp-origin": server}}
                     for name, path in configs.items()},
     }, ensure_ascii=False, indent=2))
     return 0

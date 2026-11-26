@@ -1,33 +1,28 @@
-# DSH Origin Plugin · AI 对话驱动 OriginLab Origin 科学绘图
+# MCP Origin · AI 对话驱动 OriginLab Origin 科学绘图
 
-[![npm version](https://img.shields.io/npm/v/dsh-origin-plugin?style=flat-square)](https://www.npmjs.com/package/dsh-origin-plugin)
-[![npm downloads](https://img.shields.io/npm/dm/dsh-origin-plugin?style=flat-square&label=npm%20downloads)](https://www.npmjs.com/package/dsh-origin-plugin)
-[![GitHub release](https://img.shields.io/github/v/release/zzc-2004/dsh-origin-plugin?style=flat-square)](https://github.com/zzc-2004/dsh-origin-plugin/releases)
-[![GitHub downloads](https://img.shields.io/github/downloads/zzc-2004/dsh-origin-plugin/total?style=flat-square&label=GitHub%20downloads)](https://github.com/zzc-2004/dsh-origin-plugin/releases)
-[![GitHub stars](https://img.shields.io/github/stars/zzc-2004/dsh-origin-plugin?style=flat-square)](https://github.com/zzc-2004/dsh-origin-plugin/stargazers)
-[![tools](https://img.shields.io/badge/tools-106-blueviolet?style=flat-square)](README.md)
+[![GitHub release](https://img.shields.io/github/v/release/zzc-2004/mcp-origin?style=flat-square)](https://github.com/zzc-2004/mcp-origin/releases)
+[![GitHub downloads](https://img.shields.io/github/downloads/zzc-2004/mcp-origin/total?style=flat-square&label=GitHub%20downloads)](https://github.com/zzc-2004/mcp-origin/releases)
+[![GitHub stars](https://img.shields.io/github/stars/zzc-2004/mcp-origin?style=flat-square)](https://github.com/zzc-2004/mcp-origin/stargazers)
+[![tools](https://img.shields.io/badge/tools-114-blueviolet?style=flat-square)](README.md)
 [![error codes](https://img.shields.io/badge/error%20codes-35-blue?style=flat-square)](origin_errors.py)
 [![platform](https://img.shields.io/badge/platform-Windows%2010%2F11-0078d6?style=flat-square)](README.md)
 [![Origin](https://img.shields.io/badge/Origin%2FOriginPro-2021%2B%20(2026%20tested)-ff9f1c?style=flat-square)](COMPATIBILITY.md)
 [![python](https://img.shields.io/badge/python-3.10%2B-3776ab?style=flat-square)](requirements.txt)
-[![license](https://img.shields.io/npm/l/dsh-origin-plugin?style=flat-square)](LICENSE)
+[![license](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 
-**下载与收录（国内直连，无需科学上网）**
+**下载与分发**
 
 | 渠道 | 状态 |
 |---|---|
-| 🟢 **npm 官方源** | [dsh-origin-plugin](https://www.npmjs.com/package/dsh-origin-plugin) —— `npm i -g dsh-origin-plugin`（默认最新版） |
-| 🟢 **npmmirror 淘宝镜像** | [镜像页](https://npmmirror.com/package/dsh-origin-plugin) —— 国内加速，自动同步 |
-| 🟢 **GitHub Release** | [Releases](https://github.com/zzc-2004/dsh-origin-plugin/releases) —— 源码 tgz + 说明 |
-| 🟢 **dshfind 目录源** | 已收录（`is_plugin=true`，市场内带安装命令） |
-| 🟢 **DSH 1024Store** | 已收录（DSH 桌面端市场来源） |
-| 🟢 **PyPI** | 包已构建于 `dist/`，token 到位即发布 |
+| 🟢 **GitHub Release** | [Releases](https://github.com/zzc-2004/mcp-origin/releases) —— 源码 tgz + 说明（当前官方渠道） |
+| ⚪ **npm** | 暂未发布；本仓库源码可 `npm link` 后运行 `mcp-origin` |
+| ⚪ **PyPI** | 暂未发布；可用 `python origin_mcp_stdio.py` 直接启动 |
 
 **适配**：Windows 10/11 · Origin/OriginPro 2021+（**2026 实测**）· Python 3.10+ ·
 13 种 MCP 客户端 + 豆包/Cherry Studio/通义灵码等 UI 型客户端 · **纯本机 COM 通道，
 数据不出本机、无外网依赖**。
 
-**国内可用 · DSH 生态 · MCP 桥接通用** —— 让 AI 对话直接驱动本机 **OriginLab Origin** 自动画图、分析、交付。
+**模型无关 · 任意 MCP 客户端 · 纯本机 COM** —— 让 AI 对话直接驱动本机 **OriginLab Origin** 自动画图、分析、交付。
 
 ## 来源与致谢 / Credits
 
@@ -44,6 +39,18 @@ Original copyright and license notices are retained in LICENSE and NOTICE.md.
 > The npm / PyPI / marketplace entries below refer to the corresponding **upstream packages**;
 > this repository's code and releases are the ones hosted here.
 
+## v2.8.0 更新（2026-11-25）
+
+- **新增 8 个发表级高阶科研图工具**（106 → 114），新模块 `origin_sci_charts.py`：
+  - `origin_forest_horizontal`：横向 / 双面板森林图（带帽 95% CI、分组线与零参考线）
+  - `origin_lollipop`：正负双向棒棒糖图（单 / 双面板）
+  - `origin_dumbbell`：成对哑铃图（基线→改进，右侧增益标注）
+  - `origin_ribbon_profile`：阴影置信带剖面曲线（FILLAREA 上下界）
+  - `origin_heatmap`：2D 热力图（256 阶科学色板 + 色标 + 格内数值）
+  - `origin_raincloud`：云雨图（半小提琴核密度 + 散点，1~3 面板）
+  - `origin_marginal_calibration`：边缘地毯散点 + 分位数校准曲线（±95% CI + 1:1 线）
+  - `origin_radar`：多维雷达 / 蜘蛛网对比图
+
 ## v2.7.4 更新（2026-11-19）
 
 - **误差棒不再崩溃**：`origin_plot(yerr_column=...)` 改走"须线"叠加图层
@@ -59,7 +66,7 @@ Original copyright and license notices are retained in LICENSE and NOTICE.md.
 
 > ## 🚀 [**👉 点这里：快速上手（小白版）· 4 种用法 1-3 分钟跑通 👈**](QUICKSTART.md)
 >
-> ### 😵 看不懂？把 [这个文件](skills/install-dsh-origin/SKILL.md) 发给你的 AI，说「按手册帮我装」就行。
+> ### 😵 看不懂？把 [这个文件](skills/install-mcp-origin/SKILL.md) 发给你的 AI，说「按手册帮我装」就行。
 
 [English version here](README.en.md)
 
@@ -68,8 +75,8 @@ Original copyright and license notices are retained in LICENSE and NOTICE.md.
    文生图/文生 SVG 路线（AutoFigure 类）产出的是一次性矢量对象，编辑粒度和科研可复现性不在同一层。
 
 - 🤖 对话触发：`「用 Origin 画 y=x² 折线图并导出 PNG」` → 模型自动调用工具 → 图片落盘
-- 🔌 **双形态接入**：DSH 内经官方 `@deepseek-ai/dsh-mcp-client` 桥接为原生工具；DSH 外经 **`origin_mcp_stdio.py`** 接入任何标准 MCP 客户端（Kimi Code / Cursor / Claude Desktop / WorkBuddy），或 `npx dsh-origin-plugin` 直接拉起
-- 🎨 **106 个工具**：2D 图 line/scatter/line_symbol/column/**histogram/box/bar** + 误差棒、3D、等高线、统计批、拟合参数级控制、矩阵工具、matplotlib 桥、PPT 组图
+- 🔌 **模型无关接入**：ChatGPT / Claude / DeepSeek / Gemini / Kimi / Cursor 等任何支持 MCP 的客户端，经 **`origin_mcp_stdio.py`** 接入；DSH 内经 `@deepseek-ai/dsh-mcp-client` 桥接；也可 `npx mcp-origin` 直接拉起
+- 🎨 **114 个工具**：2D 图 line/scatter/line_symbol/column/**histogram/box/bar** + 误差棒、3D、等高线、统计批、拟合参数级控制、矩阵工具、matplotlib 桥、PPT 组图
 - 📋 **计划确认流（防陈旧）**：`origin_plot_plan` 逐列画像+待确认问题+`plan_hash` → `origin_execute_plan`（数据/映射变了报 `plan_stale`，语义不明/发表级/多组对比强制走此流）
 - 🩺 **系统自检**：`origin_diagnose`——Origin 安装 / COM 注册 / 残留进程 / 导出目录权限，连不上先调它
 - 📖 **场景速查**：`origin_cookbook`——八场景调用链 + 高频工具推荐默认参数（离线秒回）
@@ -134,7 +141,7 @@ Origin64.exe（单实例 COM 自动化服务器）
 **方式 A —— 自动写入常见 AI 工具（v2.3.0 新增，推荐）**：
 
 ```bat
-git clone https://github.com/zzc-2004/dsh-origin-plugin.git "%USERPROFILE%\dsh_origin_plugin"
+git clone https://github.com/zzc-2004/mcp-origin.git "%USERPROFILE%\dsh_origin_plugin"
 cd "%USERPROFILE%\dsh_origin_plugin"
 python -m venv .venv
 .venv\Scripts\python.exe -m pip install -r requirements.txt
@@ -148,15 +155,15 @@ python install.py --yes
 **方式 B —— npx 直接拉起（v2.3.0 新增）**：
 
 ```sh
-npx -y dsh-origin-plugin --doctor       # 环境自检
-npx -y dsh-origin-plugin                # 启动 stdio MCP 服务器
+npx -y mcp-origin --doctor       # 环境自检
+npx -y mcp-origin                # 启动 stdio MCP 服务器
 ```
 
 **方式 C —— 手动配置**：把下面片段合并进你客户端的 mcpServers
 （或 `python origin_mcp_stdio.py --print-config` 打印各客户端的完整片段）：
 
 ```json
-{"mcpServers": {"dsh-origin": {
+{"mcpServers": {"mcp-origin": {
   "command": "<venv python 绝对路径>",
   "args": ["<插件目录>/origin_mcp_stdio.py"]
 }}}
@@ -177,9 +184,9 @@ npx -y dsh-origin-plugin                # 启动 stdio MCP 服务器
 
 ```sh
 # 方式一：从 GitHub 源码安装
-dsh plugin --profile web add github:zzc-2004/dsh-origin-plugin
+dsh plugin --profile web add github:zzc-2004/mcp-origin
 # 方式二：从 npm 安装（预构建分发，跳过 building 授权）
-dsh plugin add dsh-origin-plugin
+dsh plugin add mcp-origin
 ```
 
 装好后 `cordis.patch.yml` 会注册一个 `mcp-origin`（`@deepseek-ai/dsh-mcp-client`）。
@@ -187,7 +194,7 @@ dsh plugin add dsh-origin-plugin
 （`dsh plugin add`）会把它作为传递依赖装进 profile 的 node_modules——缺少它时 loader
 无法按 `name` 解析该条目，工具会**静默永不注册**（DSH 照常启动、无任何报错）。
 **v2.0.2 起 bundle 默认已自定位**：server 绝对路径由 `!!js` 在启动时按
-`<DSH_HOME>/profiles/web/node_modules/dsh-origin-plugin/` 计算（DSH_HOME 缺省回退
+`<DSH_HOME>/profiles/web/node_modules/mcp-origin/` 计算（DSH_HOME 缺省回退
 `%USERPROFILE%/.dsh`），不再受进程工作目录影响；默认用系统 `python` 启动
 `origin_mcp_server.py`。
 
@@ -328,7 +335,7 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\dsh_origin_plugin\regist
 | `origin_peak_fit` | **多峰拟合**（Gauss/Lorentz 分峰） | `worksheet`, `x_column`, `y_column` |
 | `origin_labtalk` | 逃生舱：任意 LabTalk（带激活+读回+NaN 防护） | `script` |
 
-> 完整清单以 `origin_catalog` 为准（106 个工具，文档即实现永不脱节）。
+> 完整清单以 `origin_catalog` 为准（114 个工具，文档即实现永不脱节）。
 
 ## 已知失败场景（实测汇总）
 
@@ -516,7 +523,7 @@ origin_manage_pages("close", pages=["Book3", "Book4"])              # 关掉多�
 
 ## 目录结构
 ```
-dsh-origin-plugin/
+mcp-origin/
 ├── origin_engine.py          # 核心引擎：连接/写数/画图/导出/线程/错误升级/模板/交付
 │                             #   （纯 Python，零 MCP/DSH SDK 依赖，可被任意宿主复用）
 ├── origin_errors.py          # 稳定错误码：枚举/恢复建议/恢复动作映射(RECOVERY_MAP)/遗留升级
@@ -529,7 +536,7 @@ dsh-origin-plugin/
 ├── origin_mcp_server.py      # MCP 服务器（50 工具注册式），自带自测模式
 ├── origin_mcp_stdio.py       # 通用 stdio 入口（v2.3.0：Kimi/Cursor/Claude/WorkBuddy）
 ├── install.py                # 自动检测 AI 工具并写入 mcpServers（自动备份）
-├── bin/dsh-origin-mcp.mjs    # npx 启动器（定位 Python + 依赖预检 + stdio 透传）
+├── bin/mcp-origin.mjs    # npx 启动器（定位 Python + 依赖预检 + stdio 透传）
 ├── index.js                  # DSH bundle 入口（ctx.effect 卸载清理）
 ├── demo_call.py              # 最小可运行示例（不依赖 MCP）
 ├── register_to_dsh.ps1       # 注册脚本（幂等/UTF-8 安全/自动备份）

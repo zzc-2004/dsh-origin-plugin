@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-// dsh-origin-mcp —— npx 启动器（v2.3.0 新增）
+// mcp-origin —— npx 启动器（v2.3.0 新增）
 // ==============================================
 // 让没有 DSH 的用户也能通过 npx 直接拉起 Origin MCP stdio 服务器：
 //
-//     npx -y dsh-origin-plugin            # 直接启动（stdio）
-//     npx -y dsh-origin-plugin --doctor   # 环境自检
-//     npx -y dsh-origin-plugin --print-config
+//     npx -y mcp-origin            # 直接启动（stdio）
+//     npx -y mcp-origin --doctor   # 环境自检
+//     npx -y mcp-origin --print-config
 //
 // 启动器只做三件事：定位 Python、校验 Origin 相关依赖、以 stdio 方式
 // 拉起 origin_mcp_stdio.py（全部工具与协议由 Python 侧实现）。
@@ -30,12 +30,12 @@ function pickPython() {
 
 const py = pickPython()
 if (!py) {
-  console.error('[dsh-origin-mcp] 未找到 Python。请安装 Python 3.10+，',
+  console.error('[mcp-origin] 未找到 Python。请安装 Python 3.10+，',
     '或用环境变量 DSH_ORIGIN_PYTHON 指定解释器路径。')
   process.exit(1)
 }
 if (!existsSync(entry)) {
-  console.error(`[dsh-origin-mcp] 入口缺失: ${entry}（npm 包不完整，请重装）`)
+  console.error(`[mcp-origin] 入口缺失: ${entry}（npm 包不完整，请重装）`)
   process.exit(1)
 }
 
@@ -43,7 +43,7 @@ if (!existsSync(entry)) {
 const probe = spawnSync(py, ['-c', 'import mcp, originpro, win32com, numpy, openpyxl'],
   { encoding: 'utf8' })
 if (probe.status !== 0) {
-  console.error('[dsh-origin-mcp] 缺少 Python 依赖（mcp/originpro/pywin32/numpy/openpyxl）。')
+  console.error('[mcp-origin] 缺少 Python 依赖（mcp/originpro/pywin32/numpy/openpyxl）。')
   console.error(`请执行: "${py}" -m pip install -r ${path.join(pluginDir, 'requirements.txt')}`)
   console.error('（需本机已安装 OriginLab Origin；插件通过 COM 驱动它）')
   process.exit(1)

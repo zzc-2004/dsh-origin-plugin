@@ -1,4 +1,4 @@
-# dsh-origin-plugin — DeepSeek Harness × Origin 绘图（bundle 层，v2.0.4 同步传输版）
+# mcp-origin — DeepSeek Harness × Origin 绘图（bundle 层，v2.0.4 同步传输版）
 #
 # 通过 DSH 官方 @deepseek-ai/dsh-mcp-client 把本仓库的 Python MCP server
 # （origin_mcp_server.py，stdio）注册为原生工具：
@@ -7,7 +7,7 @@
 #
 # ── v2.0.2 市场适配要点 ──
 # ▸ 路径自定位：server 的绝对路径由 !!js 在启动时按
-#     <DSH_HOME>/profiles/web/node_modules/dsh-origin-plugin/ 计算；
+#     <DSH_HOME>/profiles/web/node_modules/mcp-origin/ 计算；
 #   DSH_HOME 缺省回退到 %USERPROFILE%/.dsh。不再依赖进程工作目录，
 #   修复 2.0.1 及更早版本"python: can't open file ... origin_mcp_server.py"
 #   （旧版相对路径会解析到 DSH 可执行目录而非插件目录，导致工具永不注册）。
@@ -45,7 +45,7 @@
 #             serverName: origin
 #             transport: stdio
 #             command: C:/Users/<你>/dsh_origin_plugin/.venv/Scripts/python.exe
-#             args: [-u, -X, utf8, C:/Users/<你>/.dsh/profiles/web/node_modules/dsh-origin-plugin/origin_mcp_server.py]
+#             args: [-u, -X, utf8, C:/Users/<你>/.dsh/profiles/web/node_modules/mcp-origin/origin_mcp_server.py]
 #             env:
 #               PYTHONIOENCODING: utf-8
 #               PYTHONUNBUFFERED: '1'
@@ -68,8 +68,8 @@
           - '-u'
           - '-X'
           - utf8
-          - !!js (process.env.DSH_HOME || (String(process.env.USERPROFILE) + '/.dsh')) + '/profiles/web/node_modules/dsh-origin-plugin/origin_mcp_server.py'
-        cwd: !!js (process.env.DSH_HOME || (String(process.env.USERPROFILE) + '/.dsh')) + '/profiles/web/node_modules/dsh-origin-plugin'
+          - !!js (process.env.DSH_HOME || (String(process.env.USERPROFILE) + '/.dsh')) + '/profiles/web/node_modules/mcp-origin/origin_mcp_server.py'
+        cwd: !!js (process.env.DSH_HOME || (String(process.env.USERPROFILE) + '/.dsh')) + '/profiles/web/node_modules/mcp-origin'
         env:
           PYTHONIOENCODING: utf-8
           PYTHONUNBUFFERED: '1'
@@ -78,8 +78,8 @@
     # Self-mount: a no-op fiber so the plugin market reads this bundle as
     # "live/active" (verify.js liveIncludes checks for the package name in the
     # loader entry-name set). Without this row the only entry name is
-    # @deepseek-ai/dsh-mcp-client, so liveIncludes('dsh-origin-plugin')=false
+    # @deepseek-ai/dsh-mcp-client, so liveIncludes('mcp-origin')=false
     # and the market perpetually shows "restart to apply" even after restart.
     # apply() in index.js is a no-op; the real tools come from mcp-origin above.
-    - id: dsh-origin-plugin
-      name: dsh-origin-plugin
+    - id: mcp-origin
+      name: mcp-origin

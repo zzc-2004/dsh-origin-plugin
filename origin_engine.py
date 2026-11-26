@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-DSH Origin 画图插件 —— 核心引擎
+MCP Origin 画图插件 —— 核心引擎
 ================================
 
 基于 originpro（OriginLab 官方 Python 包，内部经 comtypes/COM 连接 Origin

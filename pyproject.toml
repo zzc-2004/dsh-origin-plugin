@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "dsh-origin-plugin"
+name = "mcp-origin"
 version = "2.7.3"
-description = "DSH Origin Plugin: drive Origin scientific plotting from AI chat via MCP (60 tools; works standalone via stdio)"
+description = "MCP Origin: drive Origin scientific plotting from AI chat via MCP (60 tools; works standalone via stdio)"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -28,10 +28,10 @@ dependencies = [
 ]
 
 [project.scripts]
-dsh-origin-mcp = "origin_mcp_stdio:main"
+mcp-origin = "origin_mcp_stdio:main"
 
 [project.urls]
-Homepage = "https://github.com/Fantasality/dsh-origin-plugin"
+Homepage = "https://github.com/Fantasality/mcp-origin"
 
 [tool.setuptools]
 py-modules = [

@@ -1,5 +1,5 @@
 {
-  "schema": "dsh-origin-thesis/styles@1",
+  "schema": "mcp-origin-thesis/styles@1",
   "version": "1.0.0",
   "updated": "2026-10-02",
   "note": "共享样式档：博士论文插图格式的唯一真源。数值从 origin-batch-style/{format_thesis_figures.py,format_composite.py} 的已验证常量原值转录，未做改动。单位：除 _pt 结尾外均为 cm。",

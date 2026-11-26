@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-DSH Origin 画图插件 —— MCP 服务器（v2.2，注册式 + 交付/验证/模板/计划流 + 细粒度编辑）
+MCP Origin 画图插件 —— MCP 服务器（v2.2，注册式 + 交付/验证/模板/计划流 + 细粒度编辑）
 ==========================================================================
 
 通过 Model Context Protocol (stdio) 把 Origin 能力暴露给 DSH：
@@ -187,7 +187,7 @@ TOOL_CATALOG = [
     {"name": "origin_classify_labtalk", "group": "连接与诊断", "desc": "LabTalk 脚本风险分级（安全/需确认/破坏性）+ 语句切分"},
     {"name": "origin_check_path", "group": "连接与诊断", "desc": "路径白名单校验（防误写系统目录）"},
     {"name": "origin_doctor", "group": "连接与诊断", "desc": "结构化健康报告：平台/安装/进程/对话框/知识库/白名单"},
-    # presets / dpi / plot type (absorbed from dsh-origin-thesis + originlab-mcp)
+    # presets / dpi / plot type (absorbed from mcp-origin-thesis + originlab-mcp)
     {"name": "origin_list_presets", "group": "排版预设", "desc": "列出全部排版预设档（thesis/composite/manuscript/nature）"},
     {"name": "origin_get_preset", "group": "排版预设", "desc": "取单个预设档完整数值（*_pt 磅值，其余 cm）"},
     {"name": "origin_apply_preset", "group": "排版预设", "desc": "一步套用预设：字体族+各级字号+刻度+线宽+网格"},
@@ -203,6 +203,15 @@ TOOL_CATALOG = [
     {"name": "origin_env_check", "group": "连接与诊断", "desc": "自检环境是否符合已知事实（部署路径/Origin 位置/看门狗）"},
     {"name": "origin_watchdog_status", "group": "连接与诊断", "desc": "查弹窗看门狗是否在跑 + 最近点掉的弹窗"},
     {"name": "origin_watchdog_scan", "group": "连接与诊断", "desc": "立刻扫一轮 Origin 弹窗并点掉（不等轮询）"},
+    # v2.8.0 发表级多样化科研图表集（告别单调柱状/散点）
+    {"name": "origin_forest_horizontal", "group": "高阶科研图表", "desc": "横向多组/双面板置信区间森林图（实心/空心点 + 带帽须线 + 零参考线）"},
+    {"name": "origin_lollipop", "group": "高阶科研图表", "desc": "横向正负双向棒棒糖图（双向配色杆 + 端点圆标 + 可选汇总菱形，支持单/双面板）"},
+    {"name": "origin_dumbbell", "group": "高阶科研图表", "desc": "成对连接哑铃图（基线空心圆 → 改进实心方连桥，支持单/双面板与增益标注）"},
+    {"name": "origin_ribbon_profile", "group": "高阶科研图表", "desc": "阴影置信带剖面曲线图（FILLAREA 上下界阴影带 + 多序列均值符号线）"},
+    {"name": "origin_heatmap", "group": "高阶科研图表", "desc": "2D 矩阵热力图 + 自定义科学色板(teal/rdbu_r/slate_amber) + 色标条 + 格内数值标注"},
+    {"name": "origin_raincloud", "group": "高阶科研图表", "desc": "云雨图 / 半小提琴核密度+观测点堆叠图（HalfViolin/ViolinBox，支持 1~3 并排面板）"},
+    {"name": "origin_marginal_calibration", "group": "高阶科研图表", "desc": "边缘地毯散点 + 分位数均值校准曲线(±95% CI) + 1:1 对角线（ScatterRug）"},
+    {"name": "origin_radar", "group": "高阶科研图表", "desc": "多维雷达/蜘蛛网对比图（Radar 原生模板）"},
 ]
 if _EXTENDED:
     TOOL_CATALOG += [
@@ -1354,7 +1363,7 @@ def origin_clone_import(files: list, book_name: str = None,
     return ob.clone_import(engine, files, book_name=book_name, sheet_name=sheet_name)
 
 
-# ═══════════ 排版预设 / DPI / 图型切换（吸收自 dsh-origin-thesis + originlab-mcp）═══════════
+# ═══════════ 排版预设 / DPI / 图型切换（吸收自 mcp-origin-thesis + originlab-mcp）═══════════
 @mcp.tool()
 def origin_list_presets() -> dict:
     """列出全部排版预设档（thesis / composite / manuscript / nature）。
@@ -2020,6 +2029,182 @@ if _EXTENDED:
         """
         return engine.survival(worksheet, time_column=time_column,
                                event_column=event_column)
+
+
+# ---------------------------------------------------------------------------
+# v2.8.0 发表级多样化科研图表工具（origin_sci_charts）
+# ---------------------------------------------------------------------------
+import origin_sci_charts as _sci
+
+
+@mcp.tool()
+def origin_forest_horizontal(
+    panels: list,
+    short_name: str = "SciForest",
+    long_name: str = "Horizontal Forest Plot",
+    page_cm: list = None,
+    file_path: str = None,
+    pdf_path: str = None,
+    width: int = 1800,
+) -> dict:
+    """绘制横向多组/双面板置信区间森林图（实心/空心点 + 带帽 95% CI 须线 + 零参考线）。"""
+    return _sci.forest_horizontal(
+        panels=panels, short_name=short_name, long_name=long_name,
+        page_cm=page_cm or [16.0, 8.6], file_path=file_path, pdf_path=pdf_path, width=width,
+    )
+
+
+@mcp.tool()
+def origin_lollipop(
+    panels: list,
+    short_name: str = "SciLolli",
+    long_name: str = "Diverging Lollipop Plot",
+    page_cm: list = None,
+    file_path: str = None,
+    pdf_path: str = None,
+    width: int = 1800,
+) -> dict:
+    """绘制横向正负双向棒棒糖图（双向配色杆 + 端点圆标 + 可选汇总菱形，支持单/双面板）。"""
+    return _sci.diverging_lollipop(
+        panels=panels, short_name=short_name, long_name=long_name,
+        page_cm=page_cm or [16.0, 9.8], file_path=file_path, pdf_path=pdf_path, width=width,
+    )
+
+
+@mcp.tool()
+def origin_dumbbell(
+    panels: list,
+    short_name: str = "SciDumb",
+    long_name: str = "Connected Dumbbell Plot",
+    page_cm: list = None,
+    file_path: str = None,
+    pdf_path: str = None,
+    width: int = 1800,
+) -> dict:
+    """绘制成对连接哑铃图（基线空心圆 → 改进实心方连桥，支持单/双面板与右端增益标注）。"""
+    return _sci.dumbbell_pair(
+        panels=panels, short_name=short_name, long_name=long_name,
+        page_cm=page_cm or [16.0, 8.6], file_path=file_path, pdf_path=pdf_path, width=width,
+    )
+
+
+@mcp.tool()
+def origin_ribbon_profile(
+    x_vals: list,
+    series_list: list,
+    x_title: str = "X",
+    y_title: str = "Y",
+    x_lim: list = None,
+    y_lim: list = None,
+    zero_line: float = 0.0,
+    short_name: str = "SciRibbon",
+    long_name: str = "Shaded Ribbon Profile",
+    page_cm: list = None,
+    file_path: str = None,
+    pdf_path: str = None,
+    width: int = 1800,
+) -> dict:
+    """绘制阴影置信带剖面曲线图（FILLAREA 上下界阴影带 + 多序列均值符号线）。"""
+    return _sci.ribbon_profile(
+        x_vals=x_vals, series_list=series_list, x_title=x_title, y_title=y_title,
+        x_lim=x_lim, y_lim=y_lim, zero_line=zero_line, short_name=short_name,
+        long_name=long_name, page_cm=page_cm or [12.8, 9.2],
+        file_path=file_path, pdf_path=pdf_path, width=width,
+    )
+
+
+@mcp.tool()
+def origin_heatmap(
+    matrix_rows: list,
+    x_labels: list,
+    y_labels: list,
+    x_title: str = "",
+    y_title: str = "",
+    cbar_title: str = "Value",
+    z_levels: list = None,
+    palette: str = "teal",
+    fmt_str: str = "{:.1f}",
+    short_name: str = "SciHeat",
+    long_name: str = "Annotated Matrix Heatmap",
+    page_cm: list = None,
+    file_path: str = None,
+    pdf_path: str = None,
+    width: int = 1800,
+) -> dict:
+    """绘制 2D 矩阵热力图 + 自定义科学色板(teal/rdbu_r/slate_amber/emerald_warm) + 色标条 + 格内数值标注。"""
+    return _sci.annotated_heatmap(
+        matrix_rows=matrix_rows, x_labels=x_labels, y_labels=y_labels,
+        x_title=x_title, y_title=y_title, cbar_title=cbar_title,
+        z_levels=z_levels, palette=palette, fmt_str=fmt_str,
+        short_name=short_name, long_name=long_name, page_cm=page_cm or [12.8, 9.0],
+        file_path=file_path, pdf_path=pdf_path, width=width,
+    )
+
+
+@mcp.tool()
+def origin_raincloud(
+    panels: list,
+    variant: str = "halfviolin",
+    short_name: str = "SciRain",
+    long_name: str = "Raincloud Distribution Plot",
+    page_cm: list = None,
+    file_path: str = None,
+    pdf_path: str = None,
+    width: int = 1800,
+) -> dict:
+    """绘制云雨图 / 半小提琴核密度+观测点堆叠图（HalfViolin/ViolinBox，支持 1~3 并排面板）。"""
+    return _sci.raincloud(
+        panels=panels, variant=variant, short_name=short_name,
+        long_name=long_name, page_cm=page_cm or [16.5, 8.2],
+        file_path=file_path, pdf_path=pdf_path, width=width,
+    )
+
+
+@mcp.tool()
+def origin_marginal_calibration(
+    x_obs: list,
+    y_pred: list,
+    n_bins: int = 8,
+    x_title: str = "Observed",
+    y_title: str = "Predicted",
+    axis_lim: list = None,
+    stat_badge: str = "",
+    short_name: str = "SciCalib",
+    long_name: str = "Marginal Rug & Calibration",
+    page_cm: list = None,
+    file_path: str = None,
+    pdf_path: str = None,
+    width: int = 1800,
+) -> dict:
+    """绘制边缘地毯散点 + 分位数均值校准曲线(±95% CI) + 1:1 对角线（ScatterRug）。"""
+    return _sci.marginal_calibration(
+        x_obs=x_obs, y_pred=y_pred, n_bins=n_bins, x_title=x_title, y_title=y_title,
+        axis_lim=axis_lim, stat_badge=stat_badge, short_name=short_name,
+        long_name=long_name, page_cm=page_cm or [11.8, 10.2],
+        file_path=file_path, pdf_path=pdf_path, width=width,
+    )
+
+
+@mcp.tool()
+def origin_radar(
+    categories: list,
+    series_dict: dict,
+    colors: list = None,
+    radial_lim: list = None,
+    short_name: str = "SciRadar",
+    long_name: str = "Multi-Metric Radar Chart",
+    page_cm: list = None,
+    file_path: str = None,
+    pdf_path: str = None,
+    width: int = 1800,
+) -> dict:
+    """绘制多维雷达/蜘蛛网对比图（Radar 原生模板）。"""
+    return _sci.radar_chart(
+        categories=categories, series_dict=series_dict, colors=colors,
+        radial_lim=radial_lim or [0.0, 1.0, 0.25], short_name=short_name,
+        long_name=long_name, page_cm=page_cm or [12.4, 10.2],
+        file_path=file_path, pdf_path=pdf_path, width=width,
+    )
 
 
 # ---------------------------------------------------------------------------

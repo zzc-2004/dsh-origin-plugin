@@ -41,7 +41,7 @@ def spec_from_plan(plan: dict) -> dict:
     p = plan.get("params", {}) or {}
     return {
         "spec_version": SPEC_VERSION,
-        "source": "dsh-origin-plugin",
+        "source": "mcp-origin",
         "created_at": plan.get("created_at"),
         "plan_hash": plan.get("plan_hash"),
         "data": {"columns": (plan.get("data") or {}).get("columns", {}),

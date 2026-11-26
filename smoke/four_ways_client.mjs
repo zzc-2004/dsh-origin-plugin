@@ -28,7 +28,7 @@ const { Client } = await import(pathToFileURL(join(SDK_DIR, 'client', 'index.js'
 const { StdioClientTransport } = await import(pathToFileURL(join(SDK_DIR, 'client', 'stdio.js')).href);
 
 const PY = String.raw`D:\workbuddyworkspace\compare\_chem_venv\Scripts\python.exe`;
-const ENTRY = String.raw`D:\workbuddyworkspace\compare\dsh-origin-plugin\origin_mcp_stdio.py`;
+const ENTRY = String.raw`D:\workbuddyworkspace\compare\mcp-origin\origin_mcp_stdio.py`;
 const OUT = String.raw`D:\workbuddyworkspace\compare\_chem_out`;
 const R = 8.314;
 

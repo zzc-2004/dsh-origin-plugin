@@ -9,13 +9,13 @@
 |---|---|---|---|
 | **DSH 插件（推荐）** | DSH Desktop + 插件 venv（mcp/originpro/pywin32/numpy/openpyxl） | cordis.patch.yml 的 mcp-origin 加载器 → `origin_mcp_server.py` | DSH 内一键安装，COM 线程 + 跨进程锁全量启用 |
 | **通用 MCP 客户端** | 仅官方 MCP SDK（`pip install "mcp>=1.0"`，实测 2.2.0）+ requirements.txt | `python origin_mcp_stdio.py` | Kimi Code / Cursor / Claude Desktop / WorkBuddy / Cline / Windsurf |
-| **npx 启动** | Node（仅做启动器）+ Python 环境 | `npx -y dsh-origin-plugin`（bin: dsh-origin-mcp） | 不想手写 JSON 配置的用户 |
+| **npx 启动** | Node（仅做启动器）+ Python 环境 | `npx -y mcp-origin`（bin: mcp-origin） | 不想手写 JSON 配置的用户 |
 | **自动写入配置** | Python 3.10+ | `python install.py [--list/--yes/--remove/--client]` | 检测已装客户端并合并写入 mcpServers（自动备份） |
 
 客户端配置片段（`python origin_mcp_stdio.py --print-config` 可打印全量）：
 
 ```json
-{"mcpServers": {"dsh-origin": {
+{"mcpServers": {"mcp-origin": {
   "command": "<python 绝对路径>",
   "args": ["<插件目录>/origin_mcp_stdio.py"]
 }}}

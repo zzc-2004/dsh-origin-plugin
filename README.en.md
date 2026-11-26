@@ -1,4 +1,4 @@
-# dsh-origin-plugin (English)
+# mcp-origin (English)
 
 > **New here? Start with the [Beginner's Quickstart](QUICKSTART.md)** — four ways to run it
 > (Origin button / copy-paste scripts / MCP client / inside DSH), pick yours, done in 1–3 minutes.
@@ -23,8 +23,8 @@ reproducibility are on different levels.
 | **B. Copy-paste scripts** | Send `skills/origin-scripting/SKILL.md` to any AI | Zero install, works with any AI |
 | **C. MCP client** | `python install.py` (auto-detects Cursor / Claude Desktop / Kimi / Cline / Continue / VS Code) | AI client users |
 | **D. HTTP (shared Origin)** | `python origin_mcp_http.py --port 8731` | Several AIs, one Origin |
-| **E. Inside DSH** | Install `dsh-origin` from the plugin market | DSH users |
-| **F. npx** | `npx dsh-origin-plugin` | Quick try |
+| **E. Inside DSH** | Install `mcp-origin` from the plugin market | DSH users |
+| **F. npx** | `npx mcp-origin` | Quick try |
 
 Requirements: Windows, Origin 2021+ (2026 tested), Python 3.10+.
 

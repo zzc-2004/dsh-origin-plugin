@@ -1,4 +1,4 @@
-# dsh-origin-plugin 战略评估：竞品对照 + 我的判断 + 改进与路线
+# mcp-origin 战略评估：竞品对照 + 我的判断 + 改进与路线
 
 > 日期：2026-09-17 ｜ 基线：v2.6.2（62 工具 / 30 错误码）
 > 本文只做分析，不改代码。所有"建议"都标注了收益/成本/验证方式，可逐条立项。
@@ -239,7 +239,7 @@
 | **P1** | HTTP transport（多客户端共享 Origin） | 多 agent 场景 | 中 | 两个客户端同时连 |
 | **P1** | 页堆积治理（超阈值提示/自动清理） | 防 30-59s 的卡顿 | 低 | 793 页场景复测 |
 | **P1** | 发布清单脚本 + market 契约模拟 | 防"发完搜不到" | 低 | 本地复现七项复核 |
-| **P2** | PyPI 发布 | Python 用户入口 | 低 | `pip install dsh-origin-plugin` |
+| **P2** | PyPI 发布 | Python 用户入口 | 低 | `pip install mcp-origin` |
 | **P2** | `origin_capabilities` 从 `oPlotIDs.h` 提取真实 option 表 | 消灭文档/实现脱节 | 中 | 与硬编码表 diff |
 | **P2** | 统计批改走 Origin 原生（自研兜底） | 可信度+可复现 | 中 | 与 R/SPSS 对照 |
 | **P2** | Peak Analyzer 接入 | 化学/材料高频 | 中 | 分峰案例 |

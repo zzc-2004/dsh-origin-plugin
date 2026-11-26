@@ -1,4 +1,4 @@
-// dsh-origin-plugin — bundle entry artifact
+// mcp-origin — bundle entry artifact
 // ===========================================
 // This is a *Python* MCP plugin: the actual server is origin_mcp_server.py,
 // launched by DSH through the mcp-origin loader entry (cordis.patch.yml →
@@ -13,7 +13,7 @@
 // needing build approval (allowBuilds).
 //
 // This module carries a no-op `apply` so the cordis loader creates a fiber
-// for dsh-origin-plugin itself. Without it, the bundle has no fiber of its
+// for mcp-origin itself. Without it, the bundle has no fiber of its
 // own (only the mcp-origin insert does), and the plugin market's installed-
 // state check (verify.js → loaderLive) reads it as perpetually "restart to
 // apply" even after a restart. The apply body is empty: this bundle's
@@ -47,7 +47,7 @@ export function describe() {
 }
 
 /** Cordis plugin entry: a no-op-ish apply so the loader creates a fiber for
- *  dsh-origin-plugin, which lets the plugin market read it as "live/active"
+ *  mcp-origin, which lets the plugin market read it as "live/active"
  *  (verify.js L149: if (loaderLive) → state='live') instead of perpetually
  *  "restart to apply" (L162: if (inBundles && !loaderLive) → state='restart').
  *  The real tools are mounted by the mcp-origin insert in cordis.patch.yml.

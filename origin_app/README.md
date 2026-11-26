@@ -1,4 +1,4 @@
-# DSH Origin Bridge · Origin App 安装指南（三步，零改 mcp.json）
+# MCP Origin Bridge · Origin App 安装指南（三步，零改 mcp.json）
 
 > 给**不会配 Python、不会改 mcp.json、不知道 MCP 是什么**的研究生/实验员：
 > 把下面这个 App 装进 Origin，以后只要点一下按钮，就能让 AI 客户端（Cursor / Claude /
@@ -51,15 +51,15 @@ mkOPX app:="DSHOriginBridge" opx:="C:\Users\<你的用户名>\AppData\Local\Orig
 ## 第三步：拖进 Origin，点按钮
 
 1. 把生成的 `DSHOriginBridge.opx` 从文件管理器**拖进 Origin 窗口**（或双击 .opx 安装）。
-2. 在 Origin 顶部菜单 **Apps（Apps Gallery）** 里找到 **DSH Origin Bridge** 按钮。
+2. 在 Origin 顶部菜单 **Apps（Apps Gallery）** 里找到 **MCP Origin Bridge** 按钮。
 3. 点一下 → 启动桥接（再点一下 → 停止）。状态会打印在 Command Window。
 
-之后，在你的 AI 客户端（已按 `install.py` 或手动配好 `dsh-origin` MCP 服务器）里直接说
+之后，在你的 AI 客户端（已按 `install.py` 或手动配好 `mcp-origin` MCP 服务器）里直接说
 "用 Origin 画 xxx"，AI 就会通过桥接驱动 Origin。
 
 > 桥接真正拉起的是插件根的 `origin_mcp_stdio.py`，并作为一个**脱离 Origin 界面线程的后台
 > 进程（sidecar）**运行，所以 Origin 界面不会卡。进程 PID 记在
-> `%LOCALAPPDATA%\OriginLab\dsh-origin\bridge.pid`，Origin 关掉时由按钮/退出清理逻辑回收。
+> `%LOCALAPPDATA%\OriginLab\mcp-origin\bridge.pid`，Origin 关掉时由按钮/退出清理逻辑回收。
 
 ---
 
@@ -78,7 +78,7 @@ mkOPX app:="DSHOriginBridge" opx:="C:\Users\<你的用户名>\AppData\Local\Orig
    `D:\workbuddyworkspace\compare\_chem_venv\Scripts\python.exe`，再点按钮。
 5. **按钮点了没反应**：先到 Command Window 看有没有报错；或手动跑
    `run -pyf "<App目录>\bridge_manager.py" --status` 看状态，再到
-   `%LOCALAPPDATA%\OriginLab\dsh-origin\bridge.log` 查启动日志。
+   `%LOCALAPPDATA%\OriginLab\mcp-origin\bridge.log` 查启动日志。
 
 ---
 

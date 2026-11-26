@@ -1,6 +1,6 @@
 # AGENTS.md — 给 AI 助手的项目说明
 
-> 你在一个叫 **dsh-origin-plugin** 的项目里。它的作用：让 AI 通过 MCP 驱动本机
+> 你在一个叫 **mcp-origin** 的项目里。它的作用：让 AI 通过 MCP 驱动本机
 > **OriginLab Origin** 画图、分析、交付。Windows + 正版 Origin（2021+，2026 实测）。
 >
 > **你（AI）请先读完下面 3 节再动手。** 这个项目的图纸和纪律都在文件里，不在你的记忆里。
@@ -9,7 +9,7 @@
 
 ## 0. 如果你是被用户叫来"装这个插件"的
 
-读 [`skills/install-dsh-origin/SKILL.md`](skills/install-dsh-origin/SKILL.md)，按它一步步做。
+读 [`skills/install-mcp-origin/SKILL.md`](skills/install-mcp-origin/SKILL.md)，按它一步步做。
 **注意它有两部分**：①配 MCP（给你工具）②装 Skill（给你纪律）——**第 2 部分不要跳**。
 
 ---
@@ -38,7 +38,7 @@
 | [`COMPATIBILITY.md`](COMPATIBILITY.md) | **动手前扫一眼**——15 条实测失败场景与替代方案（3D 轴标题、heatmap 静默失败、图例坐标陷阱…） |
 | [`skills/origin-stats/SKILL.md`](skills/origin-stats/SKILL.md) | 做统计检验（t/ANOVA/PCA/生存分析）时 |
 | [`skills/origin-scripting/SKILL.md`](skills/origin-scripting/SKILL.md) | 用户想拿脚本自己在 Origin 里跑（不需要 MCP）时 |
-| [`skills/install-dsh-origin/SKILL.md`](skills/install-dsh-origin/SKILL.md) | 安装/排障时 |
+| [`skills/install-mcp-origin/SKILL.md`](skills/install-mcp-origin/SKILL.md) | 安装/排障时 |
 | [`QUICKSTART.md`](QUICKSTART.md) | 用户问"怎么用/怎么装"时（小白语言） |
 | [`README.md`](README.md) | 需要全部 70 个工具与能力清单时 |
 | [`docs/`](docs/) | FigureSpec 声明式协议等细节 |

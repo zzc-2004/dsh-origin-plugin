@@ -298,7 +298,7 @@ def _print_config():
     }
     print(json.dumps({
         "ok": True,
-        "server_name": "dsh-origin-http",
+        "server_name": "mcp-origin-http",
         "server": server,
         "endpoint": f"http://127.0.0.1:{port}/mcp",
         "health": f"http://127.0.0.1:{port}/health",
