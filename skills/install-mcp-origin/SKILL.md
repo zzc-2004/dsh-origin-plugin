@@ -1,9 +1,9 @@
 ---
-name: install-mcp-origin
-description: 帮用户把 mcp-origin（AI 驱动 OriginLab Origin 画图的 MCP 插件）装好并验证可用。当用户说"帮我装 Origin 插件""配置 MCP""让 AI 能画 Origin 图"或遇到装到旧版本/连不上 Origin 时使用。
+name: install-origin-hands-off
+description: 帮用户把 origin-hands-off（AI 驱动 OriginLab Origin 画图的 MCP 插件）装好并验证可用。当用户说"帮我装 Origin 插件""配置 MCP""让 AI 能画 Origin 图"或遇到装到旧版本/连不上 Origin 时使用。
 ---
 
-# 安装 mcp-origin（给 AI 看的操作手册）
+# 安装 origin-hands-off（给 AI 看的操作手册）
 
 > 你是被用户请来干活的 AI。**按下面的顺序做，不要跳步，不要凭印象改路径**。
 > 目标：装完后用户说一句"用 Origin 画 x/y 折线图"，你就能真的画出图并导出文件。
@@ -41,29 +41,29 @@ description: 帮用户把 mcp-origin（AI 驱动 OriginLab Origin 画图的 MCP 
 
 **方式 A：npm 装（推荐，最快）**
 ```bash
-npm install -g mcp-origin
+npm install -g origin-hands-off
 # 国内用户如果慢，用镜像：
-npm install -g mcp-origin --registry=https://registry.npmmirror.com
+npm install -g origin-hands-off --registry=https://registry.npmmirror.com
 ```
 装完记下包位置：
 ```bash
 npm root -g
-# 通常是 C:\Users\<用户名>\AppData\Roaming\npm\node_modules\mcp-origin
+# 通常是 C:\Users\<用户名>\AppData\Roaming\npm\node_modules\origin-hands-off
 ```
 把它记作 **`<PKG_DIR>`**。
 
 **方式 B：Clone 源码**
 ```bash
-git clone https://github.com/zzc-2004/mcp-origin.git
-cd mcp-origin
+git clone https://github.com/zzc-2004/origin-hands-off.git
+cd origin-hands-off
 ```
 此时 `<PKG_DIR>` 就是这个 clone 出来的目录。
 
 > ⚠️ **版本陷阱（很常见）**：DSH 插件市场里显示的版本可能滞后（目录源缓存导致）。
 > **不要指定具体版本号**（本手册不锁版本，写死版本只会随时间过期）。
-> 想拿最新版就**不写版本**：`npm install -g mcp-origin`（默认 latest）。
-> 已经装了旧版就先 `npm uninstall -g mcp-origin` 再重装。
-> 需要确认装到的是哪一版：`npm view mcp-origin version`。
+> 想拿最新版就**不写版本**：`npm install -g origin-hands-off`（默认 latest）。
+> 已经装了旧版就先 `npm uninstall -g origin-hands-off` 再重装。
+> 需要确认装到的是哪一版：`npm view origin-hands-off version`。
 
 ---
 
@@ -118,11 +118,11 @@ Kimi Code / Gemini CLI / Trae / Zed / Continue / Codex CLI —— 结构不同�
    > 通义灵码、腾讯元宝、Chatbox、WorkBuddy？"
 3. **都没有 / 是自研客户端** → 给用户通用片段，让他粘到客户端的 MCP 设置里：
    ```json
-   {"mcpServers": {"mcp-origin": {"command": "<PYTHON>", "args": ["<PKG_DIR>\\origin_mcp_stdio.py"]}}}
+   {"mcpServers": {"origin-hands-off": {"command": "<PYTHON>", "args": ["<PKG_DIR>\\origin_mcp_stdio.py"]}}}
    ```
    并告诉他："在客户端里搜 'MCP' 或 '添加服务器'，把这段填进去。"
 4. **完全找不到入口** → 让用户在客户端里直接说：
-   > "请帮我把这个 MCP 服务器加进你的配置：命令是 <PYTHON>，参数是 <PKG_DIR>\origin_mcp_stdio.py，名字叫 mcp-origin"
+   > "请帮我把这个 MCP 服务器加进你的配置：命令是 <PYTHON>，参数是 <PKG_DIR>\origin_mcp_stdio.py，名字叫 origin-hands-off"
    多数客户端能自己完成。
 
 ### 3.3 各客户端配置文件速查（兜底时用）
@@ -140,8 +140,8 @@ Kimi Code / Gemini CLI / Trae / Zed / Continue / Codex CLI —— 结构不同�
 | Trae | `%USERPROFILE%\.trae\mcp.json` | `mcpServers` |
 | Zed | `%APPDATA%\Zed\settings.json` | `context_servers.<名字>.command = {path, args}` |
 | Continue | `%USERPROFILE%\.continue\config.json` | `experimental.modelContextProtocolServers`（数组） |
-| Codex CLI | `%USERPROFILE%\.codex\config.toml` | TOML：`[mcp_servers.mcp-origin]` 段 |
-| **DSH（DeepSeek Harness）** | **不走 mcp.json** | 用插件市场搜 `mcp-origin`；或读本仓库 SKILL |
+| Codex CLI | `%USERPROFILE%\.codex\config.toml` | TOML：`[mcp_servers.origin-hands-off]` 段 |
+| **DSH（DeepSeek Harness）** | **不走 mcp.json** | 用插件市场搜 `origin-hands-off`；或读本仓库 SKILL |
 | **Cherry Studio** | `%APPDATA%\cherry-studio\config.json` | `mcpServers`（元素还需 `type:"stdio"`、`isActive:true`；也可用 UI：设置 → MCP 服务器 → 添加） |
 
 ### 3.4 「UI 里添加」型客户端（配置文件位置随版本变，**不要猜路径**）
@@ -166,7 +166,7 @@ Kimi Code / Gemini CLI / Trae / Zed / Continue / Codex CLI —— 结构不同�
 1. 打开豆包 **电脑客户端** → 设置 → 找 **MCP 管理**（或"插件管理"）
 2. 添加本地服务，启动命令填：
    ```json
-   {"mcpServers": {"mcp-origin": {"command": "<PYTHON>", "args": ["<PKG_DIR>\\origin_mcp_stdio.py"]}}}
+   {"mcpServers": {"origin-hands-off": {"command": "<PYTHON>", "args": ["<PKG_DIR>\\origin_mcp_stdio.py"]}}}
    ```
 3. 保存后豆包会自己拉起这个本地进程（stdio，不需要公网地址与密钥）
 
@@ -289,8 +289,8 @@ python origin_mcp_server.py --offline-test  # 引擎自检（不连 Origin）
 | `origin_status` 报连不上 | 先跑 `python origin_mcp_server.py --selftest`；Origin 没开时插件会自动拉起，等 10-20 秒再试 |
 | COM 注册问题 | 以**管理员**运行一次 Origin（会自动修复 COM 注册），然后重开 |
 | 中文路径/中文列名乱码 | 已内置处理；仍异常就把数据移到纯英文路径 |
-| 装到旧版本 | 见第 1 步的版本陷阱：**不带版本号重装**（默认 latest）；`npm view mcp-origin version` 可查当前最新 |
-| 装完客户端里看不到工具 | ①**完全退出并重启**客户端（改 MCP 配置必须重启才生效）②确认配置 JSON 语法正确（反斜杠转义）③问用户"能否看到 mcp-origin 这个 MCP 服务器"④仍不行就用手册第 3 步给的那句话**让客户端自己配** |
+| 装到旧版本 | 见第 1 步的版本陷阱：**不带版本号重装**（默认 latest）；`npm view origin-hands-off version` 可查当前最新 |
+| 装完客户端里看不到工具 | ①**完全退出并重启**客户端（改 MCP 配置必须重启才生效）②确认配置 JSON 语法正确（反斜杠转义）③问用户"能否看到 origin-hands-off 这个 MCP 服务器"④仍不行就用手册第 3 步给的那句话**让客户端自己配** |
 | 卡在弹窗不动 | 插件有看门狗会自动点掉；还卡就手动关掉 Origin 的对话框 |
 | 某个功能"不支持" | 是**真的**不支持，不是配置问题——查 `<PKG_DIR>\COMPATIBILITY.md`（15 条实测失败场景，附替代方案） |
 
@@ -301,7 +301,7 @@ python origin_mcp_server.py --offline-test  # 引擎自检（不连 Origin）
 **MCP 部分**
 - [ ] Windows + 正版 Origin 2021+
 - [ ] Python 3.10+，`import originpro` 通过
-- [ ] 客户端配置里有 `mcp-origin`，路径是绝对路径且已转义
+- [ ] 客户端配置里有 `origin-hands-off`，路径是绝对路径且已转义
 - [ ] 客户端重启后能看到工具
 - [ ] `origin_status` 返回 `connected: true`
 - [ ] 说一句"用 Origin 画 x/y 折线图并导出 PNG"，能出图并给出文件路径

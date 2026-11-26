@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.8.1 (2026-11-26) — 更名 Origin Hands-off
+
+- 项目更名为 **Origin Hands-off**（曾用名 `mcp-origin` / `dsh-origin-plugin`）：模型无关，任意 MCP 客户端可用。
+- 功能与 2.8.0 相同（114 个工具）；本次仅更名、补双语介绍与文档。
+
 ## 2.8.0 (2026-11-25) — 高阶多样化科研图表引擎升级（106 → 114 工具）
 
 - 新增模块 `origin_sci_charts.py` 并在 `origin_mcp_server.py` / `origin_mcp_stdio.py` 注册 8 个发表级高阶科研图表工具：
@@ -67,7 +72,7 @@ DSH ≥ 0.1.5 在加载插件树时直接抛 `Invalid effect` 并退出——
    `connect()`，改为裸 `_connect_impl()`（项目纪律：COM 线程内不得调包装函数）。
 
 ### 文档
-- install-mcp-origin SKILL：**去掉写死的版本号**（不锁版本，默认 latest 即最新）；
+- install-origin-hands-off SKILL：**去掉写死的版本号**（不锁版本，默认 latest 即最新）；
   第 0 步改为"快查优先、不要一上来全盘递归搜 Origin64.exe"（Codex 会话实测全盘
   `-Recurse` 极慢）；第 2 步强调 `pip install -r requirements.txt` 装全套依赖
   （客户端 runtime 切换后依赖会丢失，实测坑）；排障表补"客户端看不到工具"处置。
@@ -326,7 +331,7 @@ tests/、pyproject.toml、README.en.md 入包（npm pack 清单已逐项复核�
   7 客户端配置片段、`--doctor` 一键体检）；
 - 新增 `install.py`：一键注册/卸载到 Claude Desktop / Cursor / VSCode /
   Cline / Continue / DSH / Kimi Code（自动检测、备份、合并写）；
-- `package.json` 提供真实 `bin`（`npx mcp-origin`），自动挑 Python
+- `package.json` 提供真实 `bin`（`npx origin-hands-off`），自动挑 Python
   并预检依赖；打包 files 修正遗漏的 origin_edit.py；
 - DSH 插件 `index.js` 卸载清理走 `ctx.effect` + engine 优雅停机
   （排空队列 + 毒丸 + join，COM 线程死后自愈重启）。
@@ -527,13 +532,13 @@ venv Python 3.13 全量自测通过：offline-test / selftest / Node SDK 握手�
 - v2.0.5 给 index.js 加了 no-op `apply()`，但修复方向错误：问题不在 apply 方法，
   而在于 dshmarket `verify.js` 的 `liveIncludes(live, name)` 检查的是 **insert 行
   的 `name:` 字段值**（loader entry names），不是 loader 注册表里的 fiber。
-  mcp-origin 的 insert name 是 `@deepseek-ai/dsh-mcp-client`（不是自己的
-  包名），所以 `liveIncludes(live, 'mcp-origin')` 永远 false →
+  origin-hands-off 的 insert name 是 `@deepseek-ai/dsh-mcp-client`（不是自己的
+  包名），所以 `liveIncludes(live, 'origin-hands-off')` 永远 false →
   `loaderLive=false` → 命中 `state='restart'` 分支。
 - **v2.0.6 修复**：在 cordis.patch.yml 加一条 no-op insert
-  `{ id: mcp-origin, name: mcp-origin }`，让 loader 为 mcp-origin
-  自身创建 fiber → live 集合包含 `mcp-origin` → `loaderLive=true` →
-  `state='live'`（已安装）。apply() 是 no-op；真正的工具来自 mcp-origin insert。
+  `{ id: origin-hands-off, name: origin-hands-off }`，让 loader 为 origin-hands-off
+  自身创建 fiber → live 集合包含 `origin-hands-off` → `loaderLive=true` →
+  `state='live'`（已安装）。apply() 是 no-op；真正的工具来自 origin-hands-off insert。
 - 功能零影响：28 个 Origin 工具、绘/统计/导出全部不变。
 
 
@@ -543,12 +548,12 @@ venv Python 3.13 全量自测通过：offline-test / selftest / Node SDK 握手�
 「已安装，重启后生效」而非「已安装」。
 
 - **根因**：`index.js` 的 default 导出是纯描述符对象（无 `apply` 方法）→
-  cordis loader 无法为 mcp-origin 创建 fiber → dshmarket 的
+  cordis loader 无法为 origin-hands-off 创建 fiber → dshmarket 的
   `verify.js` `loaderLive` 检查（L109/L149）永远 false → 命中 L162
-  `state='restart'`（重启后生效）分支，即使重启后 mcp-origin fiber 已 active。
+  `state='restart'`（重启后生效）分支，即使重启后 origin-hands-off fiber 已 active。
 - **修复**：给 default 导出加 no-op `apply()` 方法 → loader 创建 fiber →
   `loaderLive=true` → 命中 L149 `state='live'`（已安装）。apply 体为空（bundle
-  的运行时价值在 cordis.patch.yml 的 insert mcp-origin，不在 JS 代码）。
+  的运行时价值在 cordis.patch.yml 的 insert origin-hands-off，不在 JS 代码）。
 - 功能零影响：28 个 Origin 工具、绘/统计/导出全部不变。
 
 ## 2.0.4 (2026-08-20)
@@ -575,7 +580,7 @@ venv Python 3.13 全量自测通过：offline-test / selftest / Node SDK 握手�
   显式 `sys.stdout.buffer.flush()`，此为兜底防 stray print 缓冲）。
 - **register_to_dsh.ps1 路径修正**：venv 路径 `dsch_origin_plugin` →
   `dsh_origin_plugin`（匹配实际 venv 位置）；server 指向已安装 bundle 的
-  `node_modules/mcp-origin/origin_mcp_server.py`；profile patch 路径改为
+  `node_modules/origin-hands-off/origin_mcp_server.py`；profile patch 路径改为
   `%USERPROFILE%\.dsh\profiles\web\cordis.patch.yml`（当前 DSH Desktop 布局）。
 - **MCP SDK spawn 语义取证**：`@modelcontextprotocol/sdk` 的
   `StdioClientTransport` 用 `cross-spawn` + `shell: false`（非 shell:true），含空格
@@ -583,7 +588,7 @@ venv Python 3.13 全量自测通过：offline-test / selftest / Node SDK 握手�
   mcp 2.0.0 `stdout_writer()` 确实 `await stdout.flush()`（stdio.py L205）→ 排除
   缓冲假设，根因锁定在 anyio/ProactorEventLoop 的回环 socketpair fallback。
 
-> 注：npm registry 上 `mcp-origin` latest 仍是 2.0.1（npm 未认证）。
+> 注：npm registry 上 `origin-hands-off` latest 仍是 2.0.1（npm 未认证）。
 > v2.0.4 通过 GitHub Release 发布 tgz。用户需从 GitHub Release 手动安装，或
 > 自行 `npm publish` 同步。
 
@@ -598,8 +603,8 @@ venv Python 3.13 全量自测通过：offline-test / selftest / Node SDK 握手�
   `cordis.patch.yml` 通过 `name: '@deepseek-ai/dsh-mcp-client'` 注册工具，而该包
   此前**不在任何依赖里**，市场安装后 profile 的 node_modules 里没有它 →
   loader 无法按 name 解析该条目 → **工具静默永不注册**（DSH 照常启动、无报错）。
-  现在市场 `pnpm add mcp-origin` 会把它作为传递依赖装进 profile，
-  `mcp-origin` 条目才能真正激活；（对照证据：profile 里 node_modules 存在该包的
+  现在市场 `pnpm add origin-hands-off` 会把它作为传递依赖装进 profile，
+  `origin-hands-off` 条目才能真正激活；（对照证据：profile 里 node_modules 存在该包的
   dsh-mini/openclaw-bridge 均正常激活，缺失的仅本条目被跳过）
 - 其余（均已在 2.0.2 完成并保留）：`!!js` 自定位 server 绝对路径 + 显式 `cwd` /
   `PYTHONIOENCODING`；显式 `failOnStartupError: false` 启动安全；
@@ -616,15 +621,15 @@ venv Python 3.13 全量自测通过：offline-test / selftest / Node SDK 握手�
 - **修复相对路径 bug**：bundle 默认 `command: python` + 相对 `origin_mcp_server.py`
   会把 server 路径解析到 DSH 可执行目录（`python: can't open file ...
   origin_mcp_server.py`），工具永远不注册。现改为 `!!js` 按
-  `<DSH_HOME>/profiles/web/node_modules/mcp-origin/` 启动时自定位绝对路径
+  `<DSH_HOME>/profiles/web/node_modules/origin-hands-off/` 启动时自定位绝对路径
   （DSH_HOME 缺省回退 `%USERPROFILE%/.dsh`），并显式设置 `cwd` 与
   `PYTHONIOENCODING=utf8`；
 - **启动安全**：显式 `failOnStartupError: false` —— server 连不上只记日志、
   不注册工具，绝不让 DSH 启动失败/挂起；
 - **修复 duplicate loader entry id 启动失败**：旧版 `register_to_dsh.ps1` 写入
-  完整 insert，与 bundle 层撞成两条 `mcp-origin` 会让 DSH 直接启动崩溃。
+  完整 insert，与 bundle 层撞成两条 `origin-hands-off` 会让 DSH 直接启动崩溃。
   脚本改为写 **config-only 覆盖**（同一 id 合并，不再重复）；bundle 层保证只
-  插入一条 `mcp-origin`；README 明确「永不写第二个完整同名条目」；
+  插入一条 `origin-hands-off`；README 明确「永不写第二个完整同名条目」；
 - 全部改动不影响 28 个工具与功能（仅 bundle 装配层与注册脚本）。
 
 
@@ -688,9 +693,9 @@ OKLab/CVD 可读性度量：
 DSH 插件市场（awesome-dsh-plugin / dsh-market）收录准备：
 
 - 新增 `package.json`，声明 **`dsh.bundle`**（→ `cordis.patch.yml`），成为标准
-  bundle 插件，可通过 `dsh plugin --profile web add github:zzc-2004/mcp-origin`
+  bundle 插件，可通过 `dsh plugin --profile web add github:zzc-2004/origin-hands-off`
   一键安装/收录；
-- 新增 `cordis.patch.yml`：注册 `mcp-origin`（`@deepseek-ai/dsh-mcp-client`，stdio），
+- 新增 `cordis.patch.yml`：注册 `origin-hands-off`（`@deepseek-ai/dsh-mcp-client`，stdio），
   server 连不上时静默降级不致命；路径可用 profile 层覆盖；
 - 新增 `requirements.txt`：统一声明 `mcp / originpro / pywin32 / numpy` 依赖；
 - 新增 `run_origin_server.cmd`：venv 自适应启动器（有 `.venv` 用 venv python，

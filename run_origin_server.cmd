@@ -1,6 +1,6 @@
 @echo off
 rem ============================================================
-rem  mcp-origin 启动器：优先用本目录 .venv，否则退回系统 python
+rem  origin-hands-off 启动器：优先用本目录 .venv，否则退回系统 python
 rem  供 @deepseek-ai/dsh-mcp-client 以 stdio 方式启动
 rem ============================================================
 setlocal

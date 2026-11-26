@@ -7,13 +7,13 @@
 > ## 🧩 一个所有方式的前提
 > **先把项目拿到本地**（术语叫"克隆"，就一条命令）：
 > ```
-> git clone https://github.com/zzc-2004/mcp-origin.git
+> git clone https://github.com/zzc-2004/origin-hands-off.git
 > ```
 > 没装 git 的话，也可以直接下载压缩包解压：
-> https://github.com/zzc-2004/mcp-origin/archive/refs/tags/v2.7.0.zip
+> https://github.com/zzc-2004/origin-hands-off/archive/refs/tags/v2.7.0.zip
 > （国内下载慢就用加速：把网址开头换成 `ghproxy.com/`）
 >
-> 拿到之后，你会有一个叫 `mcp-origin` 的文件夹——下面方式一、方式四都要用它。
+> 拿到之后，你会有一个叫 `origin-hands-off` 的文件夹——下面方式一、方式四都要用它。
 
 ## 先选一种用法
 
@@ -35,9 +35,9 @@
 
 适合：不想碰命令行、不想配 Python 的人。
 
-1. 打开你克隆下来的 `mcp-origin` 文件夹，在**命令行**里执行：
+1. 打开你克隆下来的 `origin-hands-off` 文件夹，在**命令行**里执行：
    ```
-   cd mcp-origin
+   cd origin-hands-off
    python scripts/build_origin_app.py
    ```
    （不会开命令行？→ 别折腾了，**用方式三让 AI 帮你做**）
@@ -70,7 +70,7 @@
 | 你在用 | 怎么做 |
 |---|---|
 | **豆包（电脑客户端）** | **两条路，随便挑**：<br>**① 直接用，不用配**——打开豆包电脑端 → 选**工作任务模式** → 选**本地电脑** → 技能栏点**"操作电脑"** → 授权。之后你跟豆包说"打开 Origin，把这个 CSV 画成折线图导出 PNG"，它自己看屏幕点鼠标（慢，但零配置）。<br>**② 配 MCP 更快**——设置 → **MCP 管理**（或"插件管理"）→ 添加本地服务 → 命令填你的 python 路径、参数填 `项目路径\origin_mcp_stdio.py` → 保存。之后一句话 1 秒出图。 |
-| **Cherry Studio** | 简单：**设置 → MCP 服务器 → 添加服务器** → 类型选 stdio → 名称 `mcp-origin`、命令填 python 路径、参数填 `项目路径\origin_mcp_stdio.py` → 保存重启。<br>（也可以跑 `python install.py` 自动写，它会认 Cherry Studio） |
+| **Cherry Studio** | 简单：**设置 → MCP 服务器 → 添加服务器** → 类型选 stdio → 名称 `origin-hands-off`、命令填 python 路径、参数填 `项目路径\origin_mcp_stdio.py` → 保存重启。<br>（也可以跑 `python install.py` 自动写，它会认 Cherry Studio） |
 | 通义灵码 / 腾讯元宝 / Chatbox | 在它们的**设置里找「MCP / 工具 / 插件 / 扩展」**→ 添加服务器 → 填同样的命令与参数。找不到入口就**用方式三**（让 AI 帮你找）。 |
 | 其它小众 / 公司自研的 | **一定用方式三**——把手册发给 AI，它会问你是什么客户端再处理。 |
 
@@ -82,10 +82,10 @@
 
 **不管什么情况，这条路都能走通。**
 
-1. 打开这个文件：[`skills/install-mcp-origin/SKILL.md`](skills/install-mcp-origin/SKILL.md)
+1. 打开这个文件：[`skills/install-origin-hands-off/SKILL.md`](skills/install-origin-hands-off/SKILL.md)
 2. **把整个文件的内容复制**，发给你正在用的 AI（WorkBuddy、Cursor、ChatGPT、豆包、随便什么）
 3. 附上一句话：
-   > **按这个手册帮我把 mcp-origin 装好并验证可用。**
+   > **按这个手册帮我把 origin-hands-off 装好并验证可用。**
 4. 它会：检查你的电脑环境 → 找 Python → 找到你的客户端配置文件 → 写好 → 让你重启客户端 → 再验证一次
 
 **如果它问你"你用的是哪个客户端"**，就照实说（比如"用 WorkBuddy"或"用 Cursor"）——手册里有如何应对"不认识你那个客户端"的兜底流程。
@@ -97,10 +97,10 @@
 - **自动写配置**：`python install.py`（会扫描 13 种常见客户端并写入，带备份）
 - **手动配置**：
   ```json
-  {"mcpServers": {"mcp-origin": {"command": "你的python绝对路径", "args": ["项目绝对路径/origin_mcp_stdio.py"]}}}
+  {"mcpServers": {"origin-hands-off": {"command": "你的python绝对路径", "args": ["项目绝对路径/origin_mcp_stdio.py"]}}}
   ```
 - **看该填什么**：`python origin_mcp_stdio.py --print-config`
-- **npx 直接拉起**：`npx mcp-origin`
+- **npx 直接拉起**：`npx origin-hands-off`
 - **多个 AI 共用一个 Origin**（HTTP 模式）：
   ```
   python origin_mcp_http.py --port 8731
@@ -112,7 +112,7 @@
 ## 方式四：DSH（DeepSeek Harness）内原生
 
 > **两条路**：
-> - **想直接用** → 在 DSH Desktop 的**插件市场**里搜 `mcp-origin`（来源选 1024Store 或 dshfind），点安装。**这条路不需要克隆项目。**
+> - **想直接用** → 在 DSH Desktop 的**插件市场**里搜 `origin-hands-off`（来源选 1024Store 或 dshfind），点安装。**这条路不需要克隆项目。**
 > - **想自己搭/改代码** → 先按前面的「克隆项目」做，再参考项目里的 `cordis.patch.yml`。
 >
 > ⚠️ 市场里的版本号可能滞后（比如显示 2.2.1）。想用最新版就用方式三里那条 npm 命令指定版本装。
@@ -134,13 +134,13 @@
 
 | 场景 | 地址 | 说明 |
 |---|---|---|
-| npm 安装加速 | `npm install -g mcp-origin --registry=https://registry.npmmirror.com` | 淘宝 npm 镜像，已同步最新版 |
-| npm 包主页 | https://npmmirror.com/package/mcp-origin | 可查看版本与下载量 |
-| GitHub 下载加速 | 把 `github.com` 换成 `ghproxy.com/https://github.com`（例：`ghproxy.com/https://github.com/zzc-2004/mcp-origin/archive/refs/tags/v2.7.0.tar.gz`） | Release 源码包加速 |
-| 插件市场 | DSH 桌面端市场搜 `mcp-origin`（1024Store / dshfind） | 国内直连，无需科学上网 |
+| npm 安装加速 | `npm install -g origin-hands-off --registry=https://registry.npmmirror.com` | 淘宝 npm 镜像，已同步最新版 |
+| npm 包主页 | https://npmmirror.com/package/origin-hands-off | 可查看版本与下载量 |
+| GitHub 下载加速 | 把 `github.com` 换成 `ghproxy.com/https://github.com`（例：`ghproxy.com/https://github.com/zzc-2004/origin-hands-off/archive/refs/tags/v2.7.0.tar.gz`） | Release 源码包加速 |
+| 插件市场 | DSH 桌面端市场搜 `origin-hands-off`（1024Store / dshfind） | 国内直连，无需科学上网 |
 
 > ⚠️ **市场里可能显示旧版本**：目录源缓存会滞后（例如停在 2.2.1）。
-> 想用最新版，就用上面的 npm 命令装，或直接指定版本：`npm install -g mcp-origin@2.7.0`。
+> 想用最新版，就用上面的 npm 命令装，或直接指定版本：`npm install -g origin-hands-off@2.7.0`。
 
 ---
 
@@ -148,7 +148,7 @@
 
 | 现象 | 怎么办 |
 |---|---|
-| **装到了旧版本**（比如 2.2.1） | 目录源缓存导致。用 `npm install -g mcp-origin@2.7.0` 指定版本；或把上面那个 SKILL 文件发给 AI 让它处理 |
+| **装到了旧版本**（比如 2.2.1） | 目录源缓存导致。用 `npm install -g origin-hands-off@2.7.0` 指定版本；或把上面那个 SKILL 文件发给 AI 让它处理 |
 | 连不上 Origin | 先让 AI 调 `origin_diagnose`（检查安装 / COM 注册 / 残留进程 / 导出目录权限）。Origin 没开时插件会自动拉起它 |
 | 中文路径/中文列名乱码 | 已内置处理（编码自动探测）。若仍异常，把文件移到纯英文路径再试 |
 | 感觉慢 | ①让 AI 用 `origin_figure` 一次画完 ②先跑 `origin_warmup` 预热 ③项目里图页太多（>200）时跑 `origin_pages_gc`——实测 793 页会让某些操作慢 30 倍 |

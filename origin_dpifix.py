@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""导出图的 DPI 元数据修复 —— 吸收自 mcp-origin-thesis。
+"""导出图的 DPI 元数据修复 —— 吸收自 origin-hands-off-thesis。
 
 问题
 ----

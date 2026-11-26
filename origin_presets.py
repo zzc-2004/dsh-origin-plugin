@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""排版预设档 —— 吸收自 mcp-origin-thesis 的样式档 + youngminsw 的出版模板。
+"""排版预设档 —— 吸收自 origin-hands-off-thesis 的样式档 + youngminsw 的出版模板。
 
 问题
 ----

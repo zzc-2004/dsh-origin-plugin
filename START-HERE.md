@@ -61,7 +61,7 @@
 
 ## ⭐ 觉得好用？去 GitHub 点个 Star 吧
 
-**➡️ https://github.com/zzc-2004/mcp-origin**
+**➡️ https://github.com/zzc-2004/origin-hands-off**
 
 一个 ⭐ 对开源作者是最实在的鼓励，也能让更多被"画图半小时"折磨的科研人看到它。
 顺手点一下，谢谢 🙏
@@ -76,7 +76,7 @@
 | 用的是**豆包** | 豆包有个更简单的办法：开 **工作任务模式 → 本地电脑 → 技能栏点"操作电脑" → 授权**，之后连配置都不用，它自己看屏幕点鼠标就能画（慢一点，但零门槛） |
 | 用的是 **Cherry Studio** | 设置 → MCP 服务器 → 添加服务器 → 类型选 stdio → 命令填你的 python 路径、参数填项目里的 `origin_mcp_stdio.py` |
 | 装好了但连不上 Origin | 对你的 AI 说「跑一下 origin_diagnose 看看哪里有问题」 |
-| 遇到实在解决不了的 | 到 [GitHub Issues](https://github.com/zzc-2004/mcp-origin/issues) 提一个，或者让 AI 帮你提 |
+| 遇到实在解决不了的 | 到 [GitHub Issues](https://github.com/zzc-2004/origin-hands-off/issues) 提一个，或者让 AI 帮你提 |
 
 ---
 

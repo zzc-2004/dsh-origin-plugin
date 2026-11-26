@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-install.py —— mcp-origin 一键接入常见 AI 工具（v2.3.0 新增）
+install.py —— origin-hands-off 一键接入常见 AI 工具（v2.3.0 新增）
 ====================================================================
 
 自动检测本机已安装的 AI 工具（Claude Desktop / Cursor / Windsurf / Cline /
@@ -54,7 +54,7 @@ CLIENTS = {
 }
 # 只在 UI 里配 MCP 的客户端（配置文件位置随版本变，不猜路径，给 UI 步骤）：
 #   豆包 / 通义灵码 / 腾讯元宝 / Chatbox / LobeChat / Open WebUI / Dify
-#   见 skills/install-mcp-origin/SKILL.md 第 3.4 节「UI 里添加」
+#   见 skills/install-origin-hands-off/SKILL.md 第 3.4 节「UI 里添加」
 # 注意：DSH 不用 mcp.json（它走 cordis.patch.yml / 插件市场），单独提示，不在这里配置
 DSH_HOME = os.path.expandvars(r"%USERPROFILE%\.dsh")
 
@@ -188,7 +188,7 @@ def _write_special(name, path, key, server_cfg, assume_yes=False):
         return "fail", f"写入失败: {e}（请手动核对 {path} 的结构后粘贴命令）"
 
 
-def _print_fallback(python, entry, name="mcp-origin"):
+def _print_fallback(python, entry, name="origin-hands-off"):
     """兜底：一个都没检测到（或用户用的是小众/自研 agent）时，给出可照抄的方案。"""
     print("=" * 68)
     print("没有检测到常见 AI 客户端的配置文件。别急，两条路：")
@@ -207,17 +207,17 @@ def _print_fallback(python, entry, name="mcp-origin"):
     if os.path.isdir(DSH_HOME):
         print()
         print("【检测到你在用 DSH】DSH 不走 mcp.json —— 请在 DSH 插件市场搜")
-        print("  mcp-origin，或让 AI 读 skills/install-mcp-origin/SKILL.md 来装。")
+        print("  origin-hands-off，或让 AI 读 skills/install-origin-hands-off/SKILL.md 来装。")
     print("=" * 68)
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description="把 mcp-origin MCP 服务器写入常见 AI 工具配置")
+    ap = argparse.ArgumentParser(description="把 origin-hands-off MCP 服务器写入常见 AI 工具配置")
     ap.add_argument("--list", action="store_true", help="仅检测已安装的客户端")
     ap.add_argument("--yes", action="store_true", help="非交互确认")
     ap.add_argument("--client", default="", help="只处理指定客户端（见 --list 的键名）")
     ap.add_argument("--remove", action="store_true", help="移除配置而非写入")
-    ap.add_argument("--name", default="mcp-origin", help="mcpServers 里的键名（默认 mcp-origin）")
+    ap.add_argument("--name", default="origin-hands-off", help="mcpServers 里的键名（默认 origin-hands-off）")
     ap.add_argument("--python", default=sys.executable, help="Python 解释器路径")
     args = ap.parse_args(argv)
 

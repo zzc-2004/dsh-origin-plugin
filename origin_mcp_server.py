@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-MCP Origin 画图插件 —— MCP 服务器（v2.2，注册式 + 交付/验证/模板/计划流 + 细粒度编辑）
+Origin Hands-off 画图插件 —— MCP 服务器（v2.2，注册式 + 交付/验证/模板/计划流 + 细粒度编辑）
 ==========================================================================
 
 通过 Model Context Protocol (stdio) 把 Origin 能力暴露给 DSH：
@@ -187,7 +187,7 @@ TOOL_CATALOG = [
     {"name": "origin_classify_labtalk", "group": "连接与诊断", "desc": "LabTalk 脚本风险分级（安全/需确认/破坏性）+ 语句切分"},
     {"name": "origin_check_path", "group": "连接与诊断", "desc": "路径白名单校验（防误写系统目录）"},
     {"name": "origin_doctor", "group": "连接与诊断", "desc": "结构化健康报告：平台/安装/进程/对话框/知识库/白名单"},
-    # presets / dpi / plot type (absorbed from mcp-origin-thesis + originlab-mcp)
+    # presets / dpi / plot type (absorbed from origin-hands-off-thesis + originlab-mcp)
     {"name": "origin_list_presets", "group": "排版预设", "desc": "列出全部排版预设档（thesis/composite/manuscript/nature）"},
     {"name": "origin_get_preset", "group": "排版预设", "desc": "取单个预设档完整数值（*_pt 磅值，其余 cm）"},
     {"name": "origin_apply_preset", "group": "排版预设", "desc": "一步套用预设：字体族+各级字号+刻度+线宽+网格"},
@@ -1363,7 +1363,7 @@ def origin_clone_import(files: list, book_name: str = None,
     return ob.clone_import(engine, files, book_name=book_name, sheet_name=sheet_name)
 
 
-# ═══════════ 排版预设 / DPI / 图型切换（吸收自 mcp-origin-thesis + originlab-mcp）═══════════
+# ═══════════ 排版预设 / DPI / 图型切换（吸收自 origin-hands-off-thesis + originlab-mcp）═══════════
 @mcp.tool()
 def origin_list_presets() -> dict:
     """列出全部排版预设档（thesis / composite / manuscript / nature）。

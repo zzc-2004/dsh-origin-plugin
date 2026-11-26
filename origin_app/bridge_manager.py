@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-bridge_manager.py —— MCP Origin Bridge 生命周期管理（sidecar 后台进程）
+bridge_manager.py —— Origin Hands-off Bridge 生命周期管理（sidecar 后台进程）
 ======================================================================
 
 被 origin_app/launch.ogs 的按钮调用，也支持在 Origin Command Window 手动跑。
@@ -17,7 +17,7 @@ bridge_manager.py —— MCP Origin Bridge 生命周期管理（sidecar 后台�
 
 启动方式：
     --start 默认走 transport=stdio，用 subprocess 拉起插件根的 origin_mcp_stdio.py，
-    记录 PID 到 %LOCALAPPDATA%\\OriginLab\\mcp-origin\\bridge.pid。
+    记录 PID 到 %LOCALAPPDATA%\\OriginLab\\origin-hands-off\\bridge.pid。
     设环境变量 ORIGIN_BRIDGE_TRANSPORT=http 可切换到后续 HTTP server 形态
     （sidecar 监听 http://127.0.0.1:8000/mcp，AI 客户端走 HTTP transport 连接；
     需要另有一个 bridge_http_server.py 时再启用，本文件只负责拉起/管理进程）。
@@ -28,7 +28,7 @@ bridge_manager.py —— MCP Origin Bridge 生命周期管理（sidecar 后台�
     UI 消息循环，Origin 关掉也还能由本文件的 --cleanup 收尸。
 
 PID 文件位置：
-    %LOCALAPPDATA%\\OriginLab\\mcp-origin\\bridge.pid
+    %LOCALAPPDATA%\\OriginLab\\origin-hands-off\\bridge.pid
     （不放 App 目录内，避免重装 App 时残留；锁目录跨 App 版本共享。）
 """
 
@@ -53,7 +53,7 @@ STDIO_ENTRY = os.path.join(PLUGIN_DIR, "origin_mcp_stdio.py")
 HTTP_ENTRY = os.path.join(PLUGIN_DIR, "origin_mcp_http.py")
 
 # 状态/锁目录（跨 App 版本共享）
-STATE_DIR = os.path.expandvars(r"%LOCALAPPDATA%\OriginLab\mcp-origin")
+STATE_DIR = os.path.expandvars(r"%LOCALAPPDATA%\OriginLab\origin-hands-off")
 PIDFILE = os.path.join(STATE_DIR, "bridge.pid")
 
 # 默认监听端口（HTTP transport 形态用）
@@ -286,7 +286,7 @@ def _emit(result: dict) -> int:
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description="MCP Origin Bridge 生命周期管理")
+    ap = argparse.ArgumentParser(description="Origin Hands-off Bridge 生命周期管理")
     grp = ap.add_mutually_exclusive_group(required=True)
     grp.add_argument("--start", action="store_true", help="启动桥接 sidecar")
     grp.add_argument("--stop", action="store_true", help="停止桥接 sidecar")

@@ -1,8 +1,8 @@
-# MCP Origin · AI 对话驱动 OriginLab Origin 科学绘图
+# Origin Hands-off · AI 对话驱动 OriginLab Origin 科学绘图
 
-[![GitHub release](https://img.shields.io/github/v/release/zzc-2004/mcp-origin?style=flat-square)](https://github.com/zzc-2004/mcp-origin/releases)
-[![GitHub downloads](https://img.shields.io/github/downloads/zzc-2004/mcp-origin/total?style=flat-square&label=GitHub%20downloads)](https://github.com/zzc-2004/mcp-origin/releases)
-[![GitHub stars](https://img.shields.io/github/stars/zzc-2004/mcp-origin?style=flat-square)](https://github.com/zzc-2004/mcp-origin/stargazers)
+[![GitHub release](https://img.shields.io/github/v/release/zzc-2004/origin-hands-off?style=flat-square)](https://github.com/zzc-2004/origin-hands-off/releases)
+[![GitHub downloads](https://img.shields.io/github/downloads/zzc-2004/origin-hands-off/total?style=flat-square&label=GitHub%20downloads)](https://github.com/zzc-2004/origin-hands-off/releases)
+[![GitHub stars](https://img.shields.io/github/stars/zzc-2004/origin-hands-off?style=flat-square)](https://github.com/zzc-2004/origin-hands-off/stargazers)
 [![tools](https://img.shields.io/badge/tools-114-blueviolet?style=flat-square)](README.md)
 [![error codes](https://img.shields.io/badge/error%20codes-35-blue?style=flat-square)](origin_errors.py)
 [![platform](https://img.shields.io/badge/platform-Windows%2010%2F11-0078d6?style=flat-square)](README.md)
@@ -10,19 +10,25 @@
 [![python](https://img.shields.io/badge/python-3.10%2B-3776ab?style=flat-square)](requirements.txt)
 [![license](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
 
+## 简介 / Introduction
+
+**中文**：让 AI 脱手接管你本机的 OriginLab Origin——你只管说「画什么」，它负责导入数据、按投稿规范出图、做统计与分析、交付可编辑 OPJU 和图片。全程本机 COM，数据不出电脑。
+
+**English**：Hand your local OriginLab Origin to any AI chat. Just say what you want; it imports data, draws publication-grade figures, runs analysis/statistics, and delivers editable OPJU plus images — hands-off, on your own machine (local COM, data never leaves your PC).
+
 **下载与分发**
 
 | 渠道 | 状态 |
 |---|---|
-| 🟢 **GitHub Release** | [Releases](https://github.com/zzc-2004/mcp-origin/releases) —— 源码 tgz + 说明（当前官方渠道） |
-| ⚪ **npm** | 暂未发布；本仓库源码可 `npm link` 后运行 `mcp-origin` |
+| 🟢 **GitHub Release** | [Releases](https://github.com/zzc-2004/origin-hands-off/releases) —— 源码 tgz + 说明（当前官方渠道） |
+| ⚪ **npm** | 暂未发布；本仓库源码可 `npm link` 后运行 `origin-hands-off` |
 | ⚪ **PyPI** | 暂未发布；可用 `python origin_mcp_stdio.py` 直接启动 |
 
 **适配**：Windows 10/11 · Origin/OriginPro 2021+（**2026 实测**）· Python 3.10+ ·
 13 种 MCP 客户端 + 豆包/Cherry Studio/通义灵码等 UI 型客户端 · **纯本机 COM 通道，
 数据不出本机、无外网依赖**。
 
-**模型无关 · 任意 MCP 客户端 · 纯本机 COM** —— 让 AI 对话直接驱动本机 **OriginLab Origin** 自动画图、分析、交付。
+**Hands-off · 模型无关 · 任意 MCP 客户端 · 纯本机 COM** —— 让 AI 对话直接驱动本机 **OriginLab Origin** 自动画图、分析、交付。
 
 ## 来源与致谢 / Credits
 
@@ -38,6 +44,10 @@ Original copyright and license notices are retained in LICENSE and NOTICE.md.
 > 本仓库的代码与 Release 以 GitHub 这里为准。
 > The npm / PyPI / marketplace entries below refer to the corresponding **upstream packages**;
 > this repository's code and releases are the ones hosted here.
+
+## v2.8.1 更新（2026-11-26）— 更名 Origin Hands-off
+
+项目更名为 **Origin Hands-off**（曾用名 `mcp-origin` / `dsh-origin-plugin`）：仍是模型无关的 Origin MCP，任意支持 MCP 的客户端都可用；本次仅更名与双语介绍，功能与 2.8.0 相同（114 个工具）。
 
 ## v2.8.0 更新（2026-11-25）
 
@@ -66,7 +76,7 @@ Original copyright and license notices are retained in LICENSE and NOTICE.md.
 
 > ## 🚀 [**👉 点这里：快速上手（小白版）· 4 种用法 1-3 分钟跑通 👈**](QUICKSTART.md)
 >
-> ### 😵 看不懂？把 [这个文件](skills/install-mcp-origin/SKILL.md) 发给你的 AI，说「按手册帮我装」就行。
+> ### 😵 看不懂？把 [这个文件](skills/install-origin-hands-off/SKILL.md) 发给你的 AI，说「按手册帮我装」就行。
 
 [English version here](README.en.md)
 
@@ -75,7 +85,7 @@ Original copyright and license notices are retained in LICENSE and NOTICE.md.
    文生图/文生 SVG 路线（AutoFigure 类）产出的是一次性矢量对象，编辑粒度和科研可复现性不在同一层。
 
 - 🤖 对话触发：`「用 Origin 画 y=x² 折线图并导出 PNG」` → 模型自动调用工具 → 图片落盘
-- 🔌 **模型无关接入**：ChatGPT / Claude / DeepSeek / Gemini / Kimi / Cursor 等任何支持 MCP 的客户端，经 **`origin_mcp_stdio.py`** 接入；DSH 内经 `@deepseek-ai/dsh-mcp-client` 桥接；也可 `npx mcp-origin` 直接拉起
+- 🔌 **模型无关接入**：ChatGPT / Claude / DeepSeek / Gemini / Kimi / Cursor 等任何支持 MCP 的客户端，经 **`origin_mcp_stdio.py`** 接入；DSH 内经 `@deepseek-ai/dsh-mcp-client` 桥接；也可 `npx origin-hands-off` 直接拉起
 - 🎨 **114 个工具**：2D 图 line/scatter/line_symbol/column/**histogram/box/bar** + 误差棒、3D、等高线、统计批、拟合参数级控制、矩阵工具、matplotlib 桥、PPT 组图
 - 📋 **计划确认流（防陈旧）**：`origin_plot_plan` 逐列画像+待确认问题+`plan_hash` → `origin_execute_plan`（数据/映射变了报 `plan_stale`，语义不明/发表级/多组对比强制走此流）
 - 🩺 **系统自检**：`origin_diagnose`——Origin 安装 / COM 注册 / 残留进程 / 导出目录权限，连不上先调它
@@ -141,7 +151,7 @@ Origin64.exe（单实例 COM 自动化服务器）
 **方式 A —— 自动写入常见 AI 工具（v2.3.0 新增，推荐）**：
 
 ```bat
-git clone https://github.com/zzc-2004/mcp-origin.git "%USERPROFILE%\dsh_origin_plugin"
+git clone https://github.com/zzc-2004/origin-hands-off.git "%USERPROFILE%\dsh_origin_plugin"
 cd "%USERPROFILE%\dsh_origin_plugin"
 python -m venv .venv
 .venv\Scripts\python.exe -m pip install -r requirements.txt
@@ -155,15 +165,15 @@ python install.py --yes
 **方式 B —— npx 直接拉起（v2.3.0 新增）**：
 
 ```sh
-npx -y mcp-origin --doctor       # 环境自检
-npx -y mcp-origin                # 启动 stdio MCP 服务器
+npx -y origin-hands-off --doctor       # 环境自检
+npx -y origin-hands-off                # 启动 stdio MCP 服务器
 ```
 
 **方式 C —— 手动配置**：把下面片段合并进你客户端的 mcpServers
 （或 `python origin_mcp_stdio.py --print-config` 打印各客户端的完整片段）：
 
 ```json
-{"mcpServers": {"mcp-origin": {
+{"mcpServers": {"origin-hands-off": {
   "command": "<venv python 绝对路径>",
   "args": ["<插件目录>/origin_mcp_stdio.py"]
 }}}
@@ -184,24 +194,24 @@ npx -y mcp-origin                # 启动 stdio MCP 服务器
 
 ```sh
 # 方式一：从 GitHub 源码安装
-dsh plugin --profile web add github:zzc-2004/mcp-origin
+dsh plugin --profile web add github:zzc-2004/origin-hands-off
 # 方式二：从 npm 安装（预构建分发，跳过 building 授权）
-dsh plugin add mcp-origin
+dsh plugin add origin-hands-off
 ```
 
-装好后 `cordis.patch.yml` 会注册一个 `mcp-origin`（`@deepseek-ai/dsh-mcp-client`）。
+装好后 `cordis.patch.yml` 会注册一个 `origin-hands-off`（`@deepseek-ai/dsh-mcp-client`）。
 **v2.0.3 起自动携带运行时依赖 `@deepseek-ai/dsh-mcp-client`**：市场安装
 （`dsh plugin add`）会把它作为传递依赖装进 profile 的 node_modules——缺少它时 loader
 无法按 `name` 解析该条目，工具会**静默永不注册**（DSH 照常启动、无任何报错）。
 **v2.0.2 起 bundle 默认已自定位**：server 绝对路径由 `!!js` 在启动时按
-`<DSH_HOME>/profiles/web/node_modules/mcp-origin/` 计算（DSH_HOME 缺省回退
+`<DSH_HOME>/profiles/web/node_modules/origin-hands-off/` 计算（DSH_HOME 缺省回退
 `%USERPROFILE%/.dsh`），不再受进程工作目录影响；默认用系统 `python` 启动
 `origin_mcp_server.py`。
 
 > 📌 **安装此插件不会破坏 DSH 启动**：`failOnStartupError: false` —— server
 > 连不上只记日志、不注册工具，DSH 正常启动。这是插件市场适配的核心约束，已内置。
-> 唯一硬性红线：**不要在 profile 里再写第二条完整 `insert` 的 `mcp-origin`**（会触发
-> `duplicate loader entry id: mcp-origin` 启动失败）；要用 venv，请用下面的
+> 唯一硬性红线：**不要在 profile 里再写第二条完整 `insert` 的 `origin-hands-off`**（会触发
+> `duplicate loader entry id: origin-hands-off` 启动失败）；要用 venv，请用下面的
 > config-only 覆盖。
 
 **首次使用前仍需按上文「2. 安装」准备好 venv 依赖**（本插件是 Windows + Origin 本地
@@ -209,7 +219,7 @@ dsh plugin add mcp-origin
 用**同一 id + config-only** 覆盖（覆盖是**整体替换** config，必须带全字段）：
 
 ```yaml
-- id: mcp-origin
+- id: origin-hands-off
   config:
     serverName: origin
     transport: stdio
@@ -232,12 +242,12 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\dsh_origin_plugin\regist
 ```
 
 脚本会把以下 **config-only 覆盖**（注意：没有 `name`、没有 `insert`，只替换配置，
-与 bundle 层 `mcp-origin` 合并、不产生重复条目；覆盖会整体替换 config，故带全字段）
+与 bundle 层 `origin-hands-off` 合并、不产生重复条目；覆盖会整体替换 config，故带全字段）
 追加到 `%APPDATA%\dsh-desktop\harness\profiles\web\cordis.patch.yml`
 （自动备份、UTF-8 安全、幂等）：
 
 ```yaml
-- id: mcp-origin
+- id: origin-hands-off
   config:
     serverName: origin
     transport: stdio
@@ -249,12 +259,12 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\dsh_origin_plugin\regist
     toolCallTimeoutMs: 120000
 ```
 
-> ⚠️ 旧版脚本写入的是「完整 insert」，与 bundle 层组合会生成两条 `mcp-origin`
-> → DSH 启动直接报 `duplicate loader entry id: mcp-origin`。v2.0.2 的脚本已改为
+> ⚠️ 旧版脚本写入的是「完整 insert」，与 bundle 层组合会生成两条 `origin-hands-off`
+> → DSH 启动直接报 `duplicate loader entry id: origin-hands-off`。v2.0.2 的脚本已改为
 > config-only 覆盖；如果你手工写过旧格式，请删掉那条完整 insert，只保留上面的覆盖。
 
 然后 **重启 Harness**（DSH Desktop 菜单 Harness → Restart Harness，或 `Ctrl+Shift+R`）。
-可选校验：`dsh --profile web --dump-config` 能看到 `mcp-origin` 条目。
+可选校验：`dsh --profile web --dump-config` 能看到 `origin-hands-off` 条目。
 
 > 机制说明：DSH 的插件生态是 Cordis 插件树 + `cordis.patch.yml` patch 层；MCP 服务器是官方
 > 一等公民——`dsh-mcp-client` 会自动把外部 MCP 工具桥接为原生工具
@@ -523,7 +533,7 @@ origin_manage_pages("close", pages=["Book3", "Book4"])              # 关掉多�
 
 ## 目录结构
 ```
-mcp-origin/
+origin-hands-off/
 ├── origin_engine.py          # 核心引擎：连接/写数/画图/导出/线程/错误升级/模板/交付
 │                             #   （纯 Python，零 MCP/DSH SDK 依赖，可被任意宿主复用）
 ├── origin_errors.py          # 稳定错误码：枚举/恢复建议/恢复动作映射(RECOVERY_MAP)/遗留升级
@@ -536,7 +546,7 @@ mcp-origin/
 ├── origin_mcp_server.py      # MCP 服务器（50 工具注册式），自带自测模式
 ├── origin_mcp_stdio.py       # 通用 stdio 入口（v2.3.0：Kimi/Cursor/Claude/WorkBuddy）
 ├── install.py                # 自动检测 AI 工具并写入 mcpServers（自动备份）
-├── bin/mcp-origin.mjs    # npx 启动器（定位 Python + 依赖预检 + stdio 透传）
+├── bin/origin-hands-off.mjs    # npx 启动器（定位 Python + 依赖预检 + stdio 透传）
 ├── index.js                  # DSH bundle 入口（ctx.effect 卸载清理）
 ├── demo_call.py              # 最小可运行示例（不依赖 MCP）
 ├── register_to_dsh.ps1       # 注册脚本（幂等/UTF-8 安全/自动备份）
@@ -602,7 +612,7 @@ node smoke\mcp_handshake_test.mjs
 - [ ] `--mcp-test` 输出 `MCP-TEST OK`（50 工具可见，view_graph 返回 image 内容）
 - [ ] `origin_view_graph` 的返回能被识图模型正确读出轴标题/图型/配色
 - [ ] `mcp_handshake_test.mjs` 输出 `HANDSHAKE-TEST OK`
-- [ ] `register_to_dsh.ps1` 执行成功，`dsh --profile web --dump-config` 可见 mcp-origin
+- [ ] `register_to_dsh.ps1` 执行成功，`dsh --profile web --dump-config` 可见 origin-hands-off
 - [ ] 重启 Harness 后新对话触发画图，返回 PNG 路径且图片内容正确
 - [ ] 同时开 2~3 个对话各画不同图，互不干扰
 
@@ -610,7 +620,7 @@ node smoke\mcp_handshake_test.mjs
 
 | 现象 | 处理 |
 |---|---|
-| 对话里没有 `mcp__origin__*` 工具 | Harness 未重启；或 `--dump-config` 无 mcp-origin（检查 patch 编码/语法） |
+| 对话里没有 `mcp__origin__*` 工具 | Harness 未重启；或 `--dump-config` 无 origin-hands-off（检查 patch 编码/语法） |
 | `origin_status` 报 LT_execute 异常 | 存在多个 Origin64 进程：关闭多余 Origin 窗口只保留主实例后重试 |
 | Origin 弹模态对话框导致调用卡住 | 自动化期间不要手动操作 Origin；关闭对话框重试 |
 | 中文乱码 | 不要用 `Add-Content` 等 ANSI 方式追加 YAML；脚本已内置 UTF-8 写入 |

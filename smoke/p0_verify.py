@@ -4,7 +4,7 @@ P0-2 LabTalk 门禁 / P0-3 release/reconnect / P0-4 fit 参数 / P0-5 manage_plo
 P0-1 看门狗：正常调用不误触发（软超时 60s 不应介入）。
 """
 import sys, json
-sys.path.insert(0, r"D:\workbuddyworkspace\compare\mcp-origin")
+sys.path.insert(0, r"D:\workbuddyworkspace\compare\origin-hands-off")
 import numpy as np
 import origin_engine as engine
 

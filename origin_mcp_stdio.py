@@ -11,7 +11,7 @@ origin_mcp_stdio —— 通用 MCP stdio 启动入口（v2.3.0 新增）
   - originpro / pywin32 / numpy / openpyxl（Origin 自动化与文件 IO）
   - 本目录的纯 Python 引擎（origin_engine，无任何宿主 SDK 依赖）
 
-不包含 DSH 专有依赖；DSH 内通过 cordis.patch.yml 的 mcp-origin 加载器
+不包含 DSH 专有依赖；DSH 内通过 cordis.patch.yml 的 origin-hands-off 加载器
 启动 origin_mcp_server.py，二者共用同一引擎与工具面。
 
 用法：
@@ -22,7 +22,7 @@ origin_mcp_stdio —— 通用 MCP stdio 启动入口（v2.3.0 新增）
 客户端接入（把 <python> 换成你的解释器、<dir> 换成本目录绝对路径）：
     {
       "mcpServers": {
-        "mcp-origin": {
+        "origin-hands-off": {
           "command": "<python>",
           "args": ["<dir>/origin_mcp_stdio.py"]
         }
@@ -78,12 +78,12 @@ def _print_config():
     }
     print(json.dumps({
         "ok": True,
-        "server_name": "mcp-origin",
+        "server_name": "origin-hands-off",
         "server": server,
         "note": "把下面片段合并进对应客户端配置文件的 mcpServers 字段；"
                 "也可直接运行 python install.py 自动写入。",
         "clients": {name: {"config_path": path,
-                           "mcpServers": {"mcp-origin": server}}
+                           "mcpServers": {"origin-hands-off": server}}
                     for name, path in configs.items()},
     }, ensure_ascii=False, indent=2))
     return 0

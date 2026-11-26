@@ -3,9 +3,9 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "mcp-origin"
+name = "origin-hands-off"
 version = "2.7.3"
-description = "MCP Origin: drive Origin scientific plotting from AI chat via MCP (60 tools; works standalone via stdio)"
+description = "Origin Hands-off: drive Origin scientific plotting from AI chat via MCP (60 tools; works standalone via stdio)"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -28,10 +28,10 @@ dependencies = [
 ]
 
 [project.scripts]
-mcp-origin = "origin_mcp_stdio:main"
+origin-hands-off = "origin_mcp_stdio:main"
 
 [project.urls]
-Homepage = "https://github.com/Fantasality/mcp-origin"
+Homepage = "https://github.com/Fantasality/origin-hands-off"
 
 [tool.setuptools]
 py-modules = [

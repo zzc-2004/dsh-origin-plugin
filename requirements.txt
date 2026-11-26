@@ -1,4 +1,4 @@
-# mcp-origin 运行依赖（install 到独立 venv，避免污染系统 Python）
+# origin-hands-off 运行依赖（install 到独立 venv，避免污染系统 Python）
 mcp>=1.0
 originpro
 pywin32

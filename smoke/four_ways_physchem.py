@@ -16,7 +16,7 @@ import os
 import sys
 import time
 
-sys.path.insert(0, r"D:\workbuddyworkspace\compare\mcp-origin")
+sys.path.insert(0, r"D:\workbuddyworkspace\compare\origin-hands-off")
 
 OUT = r"D:\workbuddyworkspace\compare\_chem_out"
 os.makedirs(OUT, exist_ok=True)
@@ -91,7 +91,7 @@ CASES = {
 # ---------------------------------------------------------------------------
 def method_a_app():
     print("\n=== 方法 A：Origin App（按钮形态）===")
-    app_dir = os.path.join(r"D:\workbuddyworkspace\compare\mcp-origin",
+    app_dir = os.path.join(r"D:\workbuddyworkspace\compare\origin-hands-off",
                            "origin_app")
     sys.path.insert(0, app_dir)
     try:
@@ -120,7 +120,7 @@ def _call_via_stdio(cols, xc, ycs, plot_type, out_png):
     import json
     import subprocess
     py = r"D:\workbuddyworkspace\compare\_chem_venv\Scripts\python.exe"
-    entry = os.path.join(r"D:\workbuddyworkspace\compare\mcp-origin",
+    entry = os.path.join(r"D:\workbuddyworkspace\compare\origin-hands-off",
                          "origin_mcp_stdio.py")
     reqs = [
         {"jsonrpc": "2.0", "id": 1, "method": "initialize",
@@ -135,7 +135,7 @@ def _call_via_stdio(cols, xc, ycs, plot_type, out_png):
     try:
         p = subprocess.run([py, "-X", "utf8", entry], input=payload,
                            capture_output=True, text=True, timeout=180,
-                           cwd=r"D:\workbuddyworkspace\compare\mcp-origin")
+                           cwd=r"D:\workbuddyworkspace\compare\origin-hands-off")
         for line in p.stdout.splitlines():
             try:
                 resp = json.loads(line)

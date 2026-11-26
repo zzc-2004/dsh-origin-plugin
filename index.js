@@ -1,7 +1,7 @@
-// mcp-origin — bundle entry artifact
+// origin-hands-off — bundle entry artifact
 // ===========================================
 // This is a *Python* MCP plugin: the actual server is origin_mcp_server.py,
-// launched by DSH through the mcp-origin loader entry (cordis.patch.yml →
+// launched by DSH through the origin-hands-off loader entry (cordis.patch.yml →
 // @deepseek-ai/dsh-mcp-client, stdio).
 //
 // Why an index.js at all?  The DSH plugin market refuses packages that look
@@ -13,11 +13,11 @@
 // needing build approval (allowBuilds).
 //
 // This module carries a no-op `apply` so the cordis loader creates a fiber
-// for mcp-origin itself. Without it, the bundle has no fiber of its
-// own (only the mcp-origin insert does), and the plugin market's installed-
+// for origin-hands-off itself. Without it, the bundle has no fiber of its
+// own (only the origin-hands-off insert does), and the plugin market's installed-
 // state check (verify.js → loaderLive) reads it as perpetually "restart to
 // apply" even after a restart. The apply body is empty: this bundle's
-// runtime value is in cordis.patch.yml (insert mcp-origin), not in JS code.
+// runtime value is in cordis.patch.yml (insert origin-hands-off), not in JS code.
 
 import { readFileSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
@@ -36,7 +36,7 @@ export const plugin = {
   version: pkg.version,
   kind: 'python-mcp-bundle',
   server: 'origin_mcp_server.py',
-  loader: 'mcp-origin (@deepseek-ai/dsh-mcp-client, stdio)',
+  loader: 'origin-hands-off (@deepseek-ai/dsh-mcp-client, stdio)',
   layout: '28 MCP tools · styled plots · inline preview · stats batch',
   note: 'Wired into DSH by cordis.patch.yml; main/exports exist so the plugin ' +
     'market recognizes a prebuilt artifact instead of a build-required checkout.',
@@ -47,10 +47,10 @@ export function describe() {
 }
 
 /** Cordis plugin entry: a no-op-ish apply so the loader creates a fiber for
- *  mcp-origin, which lets the plugin market read it as "live/active"
+ *  origin-hands-off, which lets the plugin market read it as "live/active"
  *  (verify.js L149: if (loaderLive) → state='live') instead of perpetually
  *  "restart to apply" (L162: if (inBundles && !loaderLive) → state='restart').
- *  The real tools are mounted by the mcp-origin insert in cordis.patch.yml.
+ *  The real tools are mounted by the origin-hands-off insert in cordis.patch.yml.
  *
  *  v2.3.0: register a ctx.effect so unloading the plugin releases engine-side
  *  resources (drains the Python COM task queue and stops its worker thread)

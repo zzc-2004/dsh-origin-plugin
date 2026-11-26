@@ -1,4 +1,4 @@
-# mcp-origin — DeepSeek Harness × Origin 绘图（bundle 层，v2.0.4 同步传输版）
+# origin-hands-off — DeepSeek Harness × Origin 绘图（bundle 层，v2.0.4 同步传输版）
 #
 # 通过 DSH 官方 @deepseek-ai/dsh-mcp-client 把本仓库的 Python MCP server
 # （origin_mcp_server.py，stdio）注册为原生工具：
@@ -7,15 +7,15 @@
 #
 # ── v2.0.2 市场适配要点 ──
 # ▸ 路径自定位：server 的绝对路径由 !!js 在启动时按
-#     <DSH_HOME>/profiles/web/node_modules/mcp-origin/ 计算；
+#     <DSH_HOME>/profiles/web/node_modules/origin-hands-off/ 计算；
 #   DSH_HOME 缺省回退到 %USERPROFILE%/.dsh。不再依赖进程工作目录，
 #   修复 2.0.1 及更早版本"python: can't open file ... origin_mcp_server.py"
 #   （旧版相对路径会解析到 DSH 可执行目录而非插件目录，导致工具永不注册）。
 # ▸ 启动安全：failOnStartupError: false —— server 连不上只记日志、不注册工具，
 #   绝不让 DSH 启动失败或挂起（插件市场安装适配的核心目标：装上不坏 DSH）。
-# ▸ 单条目防冲突：本层只插入**一个** mcp-origin。切勿在 profile 里再加一条
+# ▸ 单条目防冲突：本层只插入**一个** origin-hands-off。切勿在 profile 里再加一条
 #   完整同名条目（例如 2.0.1 版 register_to_dsh.ps1 生成的完整 insert），
-#   否则 DSH 会以 "duplicate loader entry id: mcp-origin" 直接启动失败。
+#   否则 DSH 会以 "duplicate loader entry id: origin-hands-off" 直接启动失败。
 #   覆盖时请用「config-only 覆盖」（见下）。
 #
 # ── v2.0.4 同步传输要点（修复 60s boot 挂起） ──
@@ -40,12 +40,12 @@
 #   · 默认 command = 系统 PATH 中的 python。若依赖装在独立 venv（推荐），在
 #     profile 的 cordis.patch.yml 里用**同一 id + config-only** 覆盖 command/args。
 #     覆盖会**整体替换** config，因此必须带上 serverName/transport 等完整字段：
-#         - id: mcp-origin
+#         - id: origin-hands-off
 #           config:
 #             serverName: origin
 #             transport: stdio
 #             command: C:/Users/<你>/dsh_origin_plugin/.venv/Scripts/python.exe
-#             args: [-u, -X, utf8, C:/Users/<你>/.dsh/profiles/web/node_modules/mcp-origin/origin_mcp_server.py]
+#             args: [-u, -X, utf8, C:/Users/<你>/.dsh/profiles/web/node_modules/origin-hands-off/origin_mcp_server.py]
 #             env:
 #               PYTHONIOENCODING: utf-8
 #               PYTHONUNBUFFERED: '1'
@@ -58,7 +58,7 @@
 #     两条完整条目导致 duplicate loader entry id 启动失败。
 
 - insert:
-    - id: mcp-origin
+    - id: origin-hands-off
       name: '@deepseek-ai/dsh-mcp-client'
       config:
         serverName: origin
@@ -68,8 +68,8 @@
           - '-u'
           - '-X'
           - utf8
-          - !!js (process.env.DSH_HOME || (String(process.env.USERPROFILE) + '/.dsh')) + '/profiles/web/node_modules/mcp-origin/origin_mcp_server.py'
-        cwd: !!js (process.env.DSH_HOME || (String(process.env.USERPROFILE) + '/.dsh')) + '/profiles/web/node_modules/mcp-origin'
+          - !!js (process.env.DSH_HOME || (String(process.env.USERPROFILE) + '/.dsh')) + '/profiles/web/node_modules/origin-hands-off/origin_mcp_server.py'
+        cwd: !!js (process.env.DSH_HOME || (String(process.env.USERPROFILE) + '/.dsh')) + '/profiles/web/node_modules/origin-hands-off'
         env:
           PYTHONIOENCODING: utf-8
           PYTHONUNBUFFERED: '1'
@@ -78,8 +78,8 @@
     # Self-mount: a no-op fiber so the plugin market reads this bundle as
     # "live/active" (verify.js liveIncludes checks for the package name in the
     # loader entry-name set). Without this row the only entry name is
-    # @deepseek-ai/dsh-mcp-client, so liveIncludes('mcp-origin')=false
+    # @deepseek-ai/dsh-mcp-client, so liveIncludes('origin-hands-off')=false
     # and the market perpetually shows "restart to apply" even after restart.
-    # apply() in index.js is a no-op; the real tools come from mcp-origin above.
-    - id: mcp-origin
-      name: mcp-origin
+    # apply() in index.js is a no-op; the real tools come from origin-hands-off above.
+    - id: origin-hands-off
+      name: origin-hands-off
